@@ -3,6 +3,7 @@ import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login/LoginPage";
 import RegistrationPage from "./components/Login/RegistrationPage";
+import MainMenuPage from "./components/MainMenu/MainMenuPage";
 
 function App() {
   useEffect(() => {
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/main-menu" element={<MainMenuPage />} />
       </Routes>
     </div>
   );

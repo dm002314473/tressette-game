@@ -6,7 +6,11 @@ function RegistrationPage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -28,17 +32,26 @@ function RegistrationPage() {
       if (response.ok) {
         const data = await response.json();
         console.log("Register successful:", data);
+        navigate("/main-menu");
       } else {
         const errorData = await response.json();
         console.error("Register failed:", errorData);
+        setErrorMessage("Register failed. Please try again.");
+        setShowPopup(true);
       }
     } catch (error) {
       console.error("Error occurred during register:", error);
+      setErrorMessage("Register failed. Please try again later.");
+      setShowPopup(true);
     }
   };
 
   const handleLogin = () => {
     navigate("/");
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -84,6 +97,14 @@ function RegistrationPage() {
           Login here
         </span>
       </p>
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <p>{errorMessage}</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

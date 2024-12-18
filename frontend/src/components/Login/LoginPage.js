@@ -8,6 +8,9 @@ function Login() {
 
   const navigate = useNavigate();
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -27,17 +30,26 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
+        navigate("/main-menu");
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData);
+        setErrorMessage("Login failed. Please try again.");
+        setShowPopup(true);
       }
     } catch (error) {
       console.error("Error occurred during login:", error);
+      setErrorMessage("Login failed. Please try again later.");
+      setShowPopup(true);
     }
   };
 
   const handleSignUp = () => {
     navigate("/register");
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -72,6 +84,14 @@ function Login() {
           Sign up?
         </span>
       </p>
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <p>{errorMessage}</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
