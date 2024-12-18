@@ -5,6 +5,22 @@
     font-family: Arial, sans-serif;
 }
 
+.JoinGame .back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    max-width: 100px;
+    cursor: pointer;
+}
+
+.JoinGame button:hover {
+    background-color: #0056b3;
+}
+
 .JoinGame h2 {
     text-align: center;
 }

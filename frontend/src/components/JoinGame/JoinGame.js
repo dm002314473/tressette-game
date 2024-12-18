@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./JoinGame.css";
 
 function JoinGame() {
@@ -7,6 +8,8 @@ function JoinGame() {
   const [playerCount, setPlayerCount] = useState(2);
   const [gameList, setGameList] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isPublicGame) {
@@ -69,6 +72,9 @@ function JoinGame() {
 
   return (
     <div className="JoinGame">
+      <button className="back-button" onClick={() => navigate("/main-menu")}>
+        Natrag
+      </button>
       <h2>Pridruži se igri</h2>
       <div>
         <label htmlFor="join-code">Pridruži se s kodom: </label>
