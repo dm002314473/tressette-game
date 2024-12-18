@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
+import { Routes, Route } from "react-router-dom";
+import Login from "./components/Login/LoginPage";
+import RegistrationPage from "./components/Login/RegistrationPage";
 
 function App() {
-  const [message, setMessage] = useState("");
-
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/hello")
-      .then((response) => setMessage(response.data.message))
       .catch((error) => console.error("There was an error!", error));
   }, []);
 
   return (
     <div className="App">
-      <h1>{message}</h1>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<RegistrationPage />} />
+      </Routes>
     </div>
   );
 }
-
 export default App;

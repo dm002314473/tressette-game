@@ -1,0 +1,25 @@
+{
+  "name": "tressette-game",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dm002314473/tressette-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dm002314473/tressette-game/issues"
+  },
+  "homepage": "https://github.com/dm002314473/tressette-game#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.5"
+  }
+}
