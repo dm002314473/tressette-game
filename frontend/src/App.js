@@ -4,6 +4,11 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login/LoginPage";
 import RegistrationPage from "./components/Login/RegistrationPage";
 import MainMenuPage from "./components/MainMenu/MainMenuPage";
+import CreateGamePage from "./components/CreateGame/CreateGamePage";
+import RulesPage from "./components/RulesPage/RulesPage";
+import StatsPage from "./components/StatsPage/StatsPage";
+import LeaderboardPage from "./components/LeaderboardPage/LeaderboardPage";
+import MyStatsPage from "./components/LeaderboardPage/MyStatsPage";
 
 function App() {
   useEffect(() => {
@@ -18,6 +23,11 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/main-menu" element={<MainMenuPage />} />
+        <Route path="/create-game" element={<CreateGamePage />} />
+        <Route path="/rules" element={<RulesPage />} />
+        <Route path="/stats" element={<StatsPage />} />
+        <Route path="/stats/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/stats/my-stats" element={<MyStatsPage />} />
       </Routes>
     </div>
   );

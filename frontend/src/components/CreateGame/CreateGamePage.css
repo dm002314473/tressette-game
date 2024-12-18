@@ -1,14 +1,11 @@
-body {
-  background-color: #2c3e3f;
-}
-
-.menu-container {
+.options-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   background-color: #2c3e3f;
   color: #fff;
   position: relative;
+  font-family: Arial, sans-serif;
 }
 
 .exit-button {
@@ -28,32 +25,35 @@ body {
   background-color: #4b3228;
 }
 
-.menu-content {
+.options-content {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: center;
   flex-grow: 1;
+  gap: 20px;
+  padding-top: 20px;
   text-align: center;
 }
 
-.menu-title {
-  font-size: 48px;
-  margin-bottom: 50px;
+.options-block {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.options-title {
+  font-size: 24px;
   color: #20b2aa;
 }
 
-.menu-options {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.options-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-.menu-options li {
-  margin: 15px 0;
-}
-
-.menu-button {
+.options-button {
   background-color: #4a7c59;
   color: #ffffff;
   font-size: 20px;
@@ -62,10 +62,18 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-top: 3rem;
 }
 
-.menu-button:hover {
+.options-button:hover {
   background-color: #3d6c4b;
   transform: scale(1.05);
+}
+
+.main-title {
+  font-size: 36px;
+  color: #20b2aa;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
 }

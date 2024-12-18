@@ -9,6 +9,18 @@ function MainMenuPage() {
     navigate("/");
   };
 
+  const handleCreateGame = () => {
+    navigate("/create-game");
+  };
+
+  const handleRules = () => {
+    navigate("/rules");
+  };
+
+  const handleStats = () => {
+    navigate("/stats");
+  };
+
   return (
     <div className="menu-container">
       <button className="exit-button" onClick={handleExit}>
@@ -18,16 +30,22 @@ function MainMenuPage() {
         <h1 className="menu-title">Trešeta</h1>
         <ul className="menu-options">
           <li>
-            <button className="menu-button">Stvori igru</button>
+            <button className="menu-button" onClick={handleCreateGame}>
+              Stvori igru
+            </button>
           </li>
           <li>
             <button className="menu-button">Pridruži se igri</button>
           </li>
           <li>
-            <button className="menu-button">Pravila i upute</button>
+            <button className="menu-button" onClick={handleRules}>
+              Pravila i upute
+            </button>
           </li>
           <li>
-            <button className="menu-button">Statistike</button>
+            <button className="menu-button" onClick={handleStats}>
+              Statistike
+            </button>
           </li>
         </ul>
       </div>
