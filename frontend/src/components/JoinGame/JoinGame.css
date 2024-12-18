@@ -1,0 +1,63 @@
+.JoinGame {
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+.JoinGame h2 {
+    text-align: center;
+}
+
+.JoinGame input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.JoinGame label {
+    margin-right: 10px;
+}
+
+.JoinGame input[type="radio"] {
+    margin-right: 5px;
+}
+
+.JoinGame ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.JoinGame ul li {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.JoinGame ul li:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.JoinGame ul li.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.JoinGame button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}

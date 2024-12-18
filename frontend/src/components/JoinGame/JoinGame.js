@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./JoinGame.css";
 
 function JoinGame() {
   const [joinCode, setJoinCode] = useState("");
@@ -9,30 +10,60 @@ function JoinGame() {
 
   useEffect(() => {
     if (isPublicGame) {
-      const mockGames = [
-        { id: 1, name: "Public Game 1", players: 2 },
-        { id: 2, name: "Public Game 2", players: 4 },
-        { id: 3, name: "Public Game 3", players: 2 },
-        { id: 4, name: "Public Game 4", players: 4 },
-      ];
-      const filteredGames = mockGames.filter(
-        (game) => game.players === playerCount
-      );
-      setGameList(filteredGames);
+      const fetchPublicGames = async () => {
+        try {
+          // API call for getting public games by selected playerCount
+          // GET http://localhost:5000/api/games?playerCount=${playerCount}
+          const response = await fetch(`/api/games?playerCount=${playerCount}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch public games");
+          }
+          const data = await response.json();
+          setGameList(data);
+        } catch (error) {
+          console.error("Error fetching public games:", error);
+          setGameList([]);
+        }
+      };
+
+      fetchPublicGames();
     } else {
       setGameList([]);
     }
   }, [isPublicGame, playerCount]);
 
-  const handleJoinGame = () => {
-    if (isPublicGame) {
-      if (selectedGame) {
-        console.log(`Joining public game with ${playerCount} players`);
+  const handleJoinGame = async () => {
+    try {
+      if (isPublicGame) {
+        if (selectedGame) {
+          // API GET: http://localhost:5000/api/games/join
+          const response = await fetch(`/api/games/join`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ gameId: selectedGame.id }),
+          });
+          if (!response.ok) {
+            throw new Error("Failed to join public game");
+          }
+          alert(`Successfully joined public game: ${selectedGame.name}`);
+        } else {
+          alert("Molimo odaberite igru prije pridruživanja.");
+        }
       } else {
-        alert("Molimo odaberite igru prije pridruživanja.");
+        // API GET: http://localhost:5000/api/games/join-by-code
+        const response = await fetch(`/api/games/join-by-code`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code: joinCode }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to join private game");
+        }
+        alert("Successfully joined the private game");
       }
-    } else {
-      console.log(`Joining game with code: ${joinCode}`);
+    } catch (error) {
+      console.error("Error joining game:", error);
+      alert("Došlo je do pogreške prilikom pridruživanja igri.");
     }
   };
 
@@ -60,15 +91,27 @@ function JoinGame() {
         </label>
         {isPublicGame && (
           <div>
-            <label htmlFor="player-count">Broj igrača</label>
-            <select
-              id="player-count"
-              value={playerCount}
-              onChange={(e) => setPlayerCount(Number(e.target.value))}
-            >
-              <option value={2}>2</option>
-              <option value={4}>4</option>
-            </select>
+            <span>Broj igrača</span>
+            <label>
+              <input
+                type="radio"
+                name="player-count"
+                value={2}
+                checked={playerCount === 2}
+                onChange={(e) => setPlayerCount(Number(e.target.value))}
+              />
+              2
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="player-count"
+                value={4}
+                checked={playerCount === 4}
+                onChange={(e) => setPlayerCount(Number(e.target.value))}
+              />
+              4
+            </label>
           </div>
         )}
       </div>
@@ -81,22 +124,7 @@ function JoinGame() {
                 <li
                   key={game.id}
                   onClick={() => setSelectedGame(game)}
-                  style={{
-                    cursor: "pointer",
-                    padding: "10px",
-                    margin: "5px 0",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    backgroundColor:
-                      selectedGame?.id === game.id ? "#007BFF" : "#fff",
-                    color: selectedGame?.id === game.id ? "#fff" : "#000",
-                    textAlign: "center",
-                    transition: "background-color 0.3s, color 0.3s",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)")
-                  }
-                  onMouseLeave={(e) => (e.target.style.boxShadow = "none")}
+                  className={selectedGame?.id === game.id ? "selected" : ""}
                 >
                   {game.name} - {game.players} igrača
                 </li>
