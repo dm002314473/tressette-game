@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RulesPage.css";
 
 function RulesPage() {
+  const [rules, setRules] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   const handleBack = () => {
     navigate("/main-menu");
   };
+
+  useEffect(() => {
+    const fetchRules = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/rules");
+        if (!response.ok) {
+          throw new Error("Failed to fetch rules");
+        }
+        const data = await response.json();
+        setRules(data.rules);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRules();
+  }, []);
 
   return (
     <div className="rules-container">
@@ -18,20 +41,9 @@ function RulesPage() {
       <div className="rules-content">
         <h1 className="rules-title">Pravila i upute</h1>
         <div className="rules-text">
-          <p>Dobrodošli u igru Trešeta! Ovdje su osnovna pravila igre:</p>
-          <ul>
-            <li>Igra se s 32 karte.</li>
-            <li>Cilj igre je osvojiti što više bodova kombinacijama karata.</li>
-            <li>Igrači naizmjenično bacaju karte i prikupljaju bodove.</li>
-            <li>
-              Ukupni pobjednik je igrač s najviše osvojenih bodova na kraju
-              igre.
-            </li>
-          </ul>
-          <p>
-            Za detaljnija pravila i strategije igre, obratite se uputama ili
-            pitajte druge igrače!
-          </p>
+          {loading && <p>Učitavanje pravila...</p>}
+          {error && <p className="error-message">{error}</p>}
+          {rules && <p>{rules}</p>}
         </div>
       </div>
     </div>
