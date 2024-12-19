@@ -4,7 +4,12 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login/LoginPage";
 import RegistrationPage from "./components/Login/RegistrationPage";
 import MainMenuPage from "./components/MainMenu/MainMenuPage";
-import JoinGamePage from "./components/JoinGame/JoinGame";
+import CreateGame from "./components/CreateGame/CreateGamePage";
+import JoinGame from "./components/JoinGame/JoinGame";
+import LeaderboardPage from "./components/LeaderboardPage/LeaderboardPage";
+import RulesPage from "./components/RulesPage/RulesPage";
+import StatsPage from "./components/StatsPage/StatsPage";
+import MyStatsPage from "./components/LeaderboardPage/MyStatsPage";
 
 function App() {
   useEffect(() => {
@@ -19,7 +24,12 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/main-menu" element={<MainMenuPage />} />
-        <Route path="/main-menu/join-game" element={<JoinGamePage />} />
+        <Route path="/create-game" element={<CreateGame />} />
+        <Route path="/join-game" element={<JoinGame />} />
+        <Route path="/rules" element={<RulesPage />} />
+        <Route path="/stats" element={<StatsPage />} />
+        <Route path="/stats/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/stats/my-stats" element={<MyStatsPage />} />
       </Routes>
     </div>
   );

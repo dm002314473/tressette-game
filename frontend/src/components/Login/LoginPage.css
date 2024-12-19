@@ -1,18 +1,19 @@
 .Login {
-  width: 100%;
+  width: 100vh;
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid black;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: #071b1c;
   font-family: Arial, sans-serif;
+  color: #fff;
 }
 
 .Login h2 {
   text-align: center;
-  color: #333;
+  color: #20b2aa;
   margin-bottom: 20px;
 }
 
@@ -24,30 +25,32 @@
 
 .Login label {
   font-size: 14px;
-  color: #555;
+  color: #ddd;
   margin-bottom: 5px;
 }
 
 .Login input {
   padding: 10px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid #4a7c59;
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
+  background-color: white;
+  color: black;
 }
 
 .Login input:focus {
-  border-color: #007bff;
+  border-color: #20b2aa;
   outline: none;
-  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 3px rgba(32, 178, 170, 0.5);
 }
 
 .Login button {
   padding: 10px 15px;
   font-size: 16px;
   color: #fff;
-  background-color: #007bff;
+  background-color: #4a7c59;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -55,32 +58,32 @@
 }
 
 .Login button:hover {
-  background-color: #0056b3;
+  background-color: #3d6c4b;
 }
 
 .Login p {
   text-align: center;
   margin-top: 10px;
-  color: #555;
+  color: #ddd;
 }
 
 .Login button + button {
-  background-color: #28a745;
+  background-color: #5c4033;
   margin-top: 10px;
 }
 
 .Login button + button:hover {
-  background-color: #218838;
+  background-color: #4b3228;
 }
 
 .SignUp {
-  color: #007bff;
+  color: #20b2aa;
   cursor: pointer;
   text-decoration: underline;
 }
 
 .SignUp:hover {
-  color: #0056b3;
+  color: #3d6c4b;
 }
 
 .popup {
@@ -94,21 +97,25 @@
   justify-content: center;
   align-items: center;
 }
+
 .popup-content {
-  background: white;
+  background: #2c3e3f;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+  color: #fff;
 }
+
 .popup-content button {
   margin-top: 10px;
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #4a7c59;
   color: white;
   border: none;
   border-radius: 3px;
   cursor: pointer;
 }
+
 .popup-content button:hover {
-  background-color: #0056b3;
+  background-color: #3d6c4b;
 }

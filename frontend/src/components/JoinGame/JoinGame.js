@@ -71,77 +71,83 @@ function JoinGame() {
   };
 
   return (
-    <div className="JoinGame">
+    <div className="JoinGame-container">
       <button className="back-button" onClick={() => navigate("/main-menu")}>
         Natrag
       </button>
-      <h2>Pridruži se igri</h2>
-      <div>
-        <label htmlFor="join-code">Pridruži se s kodom: </label>
-        <input
-          id="join-code"
-          type="text"
-          value={joinCode}
-          onChange={(e) => setJoinCode(e.target.value)}
-          placeholder="Unesi kod"
-        />
-      </div>
-      <div>
-        <label>
+      <h1>Pridruži se igri</h1>
+      <div className="JoinGame-content">
+        <div>
+          <label htmlFor="join-code" className="style-text">
+            Pridruži se s kodom:{" "}
+          </label>
           <input
-            type="checkbox"
-            checked={isPublicGame}
-            onChange={(e) => setIsPublicGame(e.target.checked)}
+            id="join-code"
+            type="text"
+            value={joinCode}
+            onChange={(e) => setJoinCode(e.target.value)}
+            placeholder="Unesi kod"
           />
-          Pridruži se javnoj igri
-        </label>
+        </div>
+        <div>
+          <label className="style-text">
+            <input
+              type="checkbox"
+              checked={isPublicGame}
+              onChange={(e) => setIsPublicGame(e.target.checked)}
+            />
+            Pridruži se javnoj igri
+          </label>
+          {isPublicGame && (
+            <div>
+              <span className="style-text">Broj igrača</span>
+              <label>
+                <input
+                  type="radio"
+                  name="player-count"
+                  value={2}
+                  checked={playerCount === 2}
+                  onChange={(e) => setPlayerCount(Number(e.target.value))}
+                />
+                2
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="player-count"
+                  value={4}
+                  checked={playerCount === 4}
+                  onChange={(e) => setPlayerCount(Number(e.target.value))}
+                />
+                4
+              </label>
+            </div>
+          )}
+        </div>
         {isPublicGame && (
           <div>
-            <span>Broj igrača</span>
-            <label>
-              <input
-                type="radio"
-                name="player-count"
-                value={2}
-                checked={playerCount === 2}
-                onChange={(e) => setPlayerCount(Number(e.target.value))}
-              />
-              2
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="player-count"
-                value={4}
-                checked={playerCount === 4}
-                onChange={(e) => setPlayerCount(Number(e.target.value))}
-              />
-              4
-            </label>
+            <h3>Lista dostupnih igara</h3>
+            <ul>
+              {gameList.length > 0 ? (
+                gameList.map((game) => (
+                  <li
+                    key={game.id}
+                    onClick={() => setSelectedGame(game)}
+                    className={selectedGame?.id === game.id ? "selected" : ""}
+                  >
+                    {game.name} - {game.players} igrača
+                  </li>
+                ))
+              ) : (
+                <li>Nema dostupnih igara</li>
+              )}
+            </ul>
           </div>
         )}
+        <button className="join-button" onClick={handleJoinGame}>
+          Pridruži se
+        </button>
       </div>
-      {isPublicGame && (
-        <div>
-          <h3>Lista dostupnih igara</h3>
-          <ul>
-            {gameList.length > 0 ? (
-              gameList.map((game) => (
-                <li
-                  key={game.id}
-                  onClick={() => setSelectedGame(game)}
-                  className={selectedGame?.id === game.id ? "selected" : ""}
-                >
-                  {game.name} - {game.players} igrača
-                </li>
-              ))
-            ) : (
-              <li>Nema dostupnih igara</li>
-            )}
-          </ul>
-        </div>
-      )}
-      <button onClick={handleJoinGame}>Pridruži se</button>
     </div>
   );
 }
