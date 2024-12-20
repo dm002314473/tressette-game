@@ -2,35 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RulesPage.css";
 
-function RulesPage() {
-  const [rules, setRules] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const TRESSETTE_RULES = `
+1. Igra je trešeta, pravila su za trešetu.<br />
+2. Ako izađete iz partije, gubite.<br />
+3. Ako ne odigrate potez u roku od 10 sekundi, gubite.<br />`;
 
+function RulesPage() {
   const navigate = useNavigate();
 
   const handleBack = () => {
     navigate("/main-menu");
   };
-
-  useEffect(() => {
-    const fetchRules = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/rules");
-        if (!response.ok) {
-          throw new Error("Failed to fetch rules");
-        }
-        const data = await response.json();
-        setRules(data.rules);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRules();
-  }, []);
 
   return (
     <div className="rules-container">
@@ -40,11 +22,10 @@ function RulesPage() {
 
       <div className="rules-content">
         <h1 className="rules-title">Pravila i upute</h1>
-        <div className="rules-text">
-          {loading && <p>Učitavanje pravila...</p>}
-          {error && <p className="error-message">{error}</p>}
-          {rules && <p>{rules}</p>}
-        </div>
+        <div
+          className="rules-text"
+          dangerouslySetInnerHTML={{ __html: TRESSETTE_RULES }}
+        />
       </div>
     </div>
   );
