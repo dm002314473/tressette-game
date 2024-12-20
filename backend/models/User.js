@@ -5,6 +5,13 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   username: { type: String, required: true, unique: true },
+  stats: {
+    totalWins: { type: Number, required: true },
+    win1v1: { type: Number, required: true },
+    win2v2: { type: Number, required: true },
+    winPercentage: { type: Number, required: true },
+    played: { type: Number, required: true },
+  },
 });
 
 UserSchema.pre("save", async function (next) {

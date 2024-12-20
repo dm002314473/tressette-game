@@ -49,12 +49,21 @@
   flex-wrap: wrap;
 }
 
-.stat-block {
+.stat-button {
   background-color: #4a7c59;
   color: #ffffff;
-  padding: 10px 20px;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
   border-radius: 5px;
-  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 3rem;
+}
+
+.stat-button:hover {
+  background-color: #3d6c4b;
+  transform: scale(1.05);
 }
 
 .leaderboard-players {

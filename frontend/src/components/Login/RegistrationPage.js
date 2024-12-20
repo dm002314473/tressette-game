@@ -19,6 +19,13 @@ function RegistrationPage() {
         email: email,
         username: username,
         password: password,
+        stats: {
+          totalWins: 0,
+          win1v1: 0,
+          win2v2: 0,
+          winPercentage: 0,
+          played: 0,
+        },
       };
 
       const response = await fetch("http://localhost:5000/api/auth/register", {

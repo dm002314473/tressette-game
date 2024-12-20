@@ -4,7 +4,7 @@ const { validateEmail } = require("../utils/validateInput");
 // User registration
 const RegisterUser = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, username, password, stats } = req.body;
 
     // Check if all fields are entered
     if (!username || !email || !password) {
@@ -26,7 +26,7 @@ const RegisterUser = async (req, res) => {
         .json({ message: "Korisnik s tim emailom već postoji." });
     }
 
-    const user = new User({ username, email, password });
+    const user = new User({ username, email, password, stats });
     await user.save();
 
     return res
