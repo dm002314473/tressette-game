@@ -8,11 +8,6 @@ const LeaderboardFetch = async (req, res) => {
     const sortCriteria = { [sortField]: sortOrder };
 
     const topUsers = await Users.find({}).sort(sortCriteria).limit(10);
-    console.log(sortField);
-    console.log(sortOrder);
-    topUsers.forEach((user) => {
-      console.log(user);
-    });
     res.status(200).json(topUsers);
   } catch (error) {
     console.error("Error fetching leaderboard:", error);

@@ -6,6 +6,8 @@ import "./LeaderboardPage.css";
 function LeaderboardPage() {
   const navigate = useNavigate();
 
+  const [selectedButton, setSelectedButton] = useState("stats.totalWins");
+
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,6 +44,7 @@ function LeaderboardPage() {
   }, [sortBy, sortOrder]);
 
   const handleSortChange = (field, order, category) => {
+    setSelectedButton(field);
     setSortBy(field);
     setSortOrder(order);
     setSelectedCategory(category);
@@ -61,7 +64,9 @@ function LeaderboardPage() {
         <h1 className="main-title">Ljestvica</h1>
         <div className="leaderboard-stats">
           <button
-            className="stat-button"
+            className={`stat-button ${
+              selectedButton === "stats.totalWins" ? "selected" : ""
+            }`}
             onClick={() =>
               handleSortChange("stats.totalWins", -1, "ukupnom broju pobjeda")
             }
@@ -69,7 +74,9 @@ function LeaderboardPage() {
             Broj pobjeda ukupno
           </button>
           <button
-            className="stat-button"
+            className={`stat-button ${
+              selectedButton === "stats.win1v1" ? "selected" : ""
+            }`}
             onClick={() =>
               handleSortChange("stats.win1v1", -1, "pobjedama 1v1")
             }
@@ -77,7 +84,9 @@ function LeaderboardPage() {
             Broj pobjeda 1v1
           </button>
           <button
-            className="stat-button"
+            className={`stat-button ${
+              selectedButton === "stats.win2v2" ? "selected" : ""
+            }`}
             onClick={() =>
               handleSortChange("stats.win2v2", -1, "pobjedama 2v2")
             }
@@ -85,7 +94,9 @@ function LeaderboardPage() {
             Broj pobjeda 2v2
           </button>
           <button
-            className="stat-button"
+            className={`stat-button ${
+              selectedButton === "stats.winPercentage" ? "selected" : ""
+            }`}
             onClick={() =>
               handleSortChange(
                 "stats.winPercentage",
