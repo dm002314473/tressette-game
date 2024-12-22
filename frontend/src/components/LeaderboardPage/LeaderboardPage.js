@@ -4,6 +4,14 @@ import get from "lodash/get";
 import "./LeaderboardPage.css";
 
 function LeaderboardPage() {
+  const [leaderboards, setLeaderboards] = useState({
+    totalWins: [],
+    oneVsOneWins: [],
+    twoVsTwoWins: [],
+    winPercentage: [],
+  });
+  const [activeCategory, setActiveCategory] = useState("totalWins");
+
   const navigate = useNavigate();
 
   const [selectedButton, setSelectedButton] = useState("stats.totalWins");
@@ -52,6 +60,44 @@ function LeaderboardPage() {
 
   const handleBack = () => {
     navigate("/stats");
+  };
+
+  const fetchLeaderboard = async (category) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch(
+        `http://localhost:5000/api/leaderboard/${category}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch leaderboard data");
+      }
+      const data = await response.json();
+      setLeaderboards((prev) => ({ ...prev, [category]: data }));
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaderboard(activeCategory);
+  }, [activeCategory]);
+
+  const renderLeaderboard = () => {
+    if (loading) return <p>Učitavanje ljestvice...</p>;
+    if (error) return <p className="error-message">{error}</p>;
+
+    return (
+      <div className="leaderboard-players">
+        {leaderboards[activeCategory].map((player, index) => (
+          <div key={index} className="player-row">
+            {index + 1}. {player.name} - {player.value}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -125,6 +171,7 @@ function LeaderboardPage() {
             ))
           )}
         </div>
+        {renderLeaderboard()}
       </div>
     </div>
   );

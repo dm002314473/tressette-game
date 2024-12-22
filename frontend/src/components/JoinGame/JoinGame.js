@@ -11,6 +11,10 @@ function JoinGame() {
 
   const navigate = useNavigate();
 
+  const handleNumberOfPlayersClick = (count) => {
+    setPlayerCount(count);
+  };
+
   useEffect(() => {
     if (isPublicGame) {
       const fetchPublicGames = async () => {
@@ -101,26 +105,24 @@ function JoinGame() {
           {isPublicGame && (
             <div>
               <span className="style-text">Broj igrača</span>
-              <label>
-                <input
-                  type="radio"
-                  name="player-count"
-                  value={2}
-                  checked={playerCount === 2}
-                  onChange={(e) => setPlayerCount(Number(e.target.value))}
-                />
-                2
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="player-count"
-                  value={4}
-                  checked={playerCount === 4}
-                  onChange={(e) => setPlayerCount(Number(e.target.value))}
-                />
-                4
-              </label>
+              <div className="button-container">
+                <button
+                  className={`player-count-button ${
+                    playerCount === 2 ? "active" : ""
+                  }`}
+                  onClick={() => handleNumberOfPlayersClick(2)}
+                >
+                  2
+                </button>
+                <button
+                  className={`player-count-button ${
+                    playerCount === 4 ? "active" : ""
+                  }`}
+                  onClick={() => handleNumberOfPlayersClick(4)}
+                >
+                  4
+                </button>
+              </div>
             </div>
           )}
         </div>
