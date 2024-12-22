@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import { useUser } from "../globalUsername/userContext";
 
 function RegistrationPage() {
+  const { setUsername: saveUsername } = useUser();
+
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +42,7 @@ function RegistrationPage() {
       if (response.ok) {
         const data = await response.json();
         console.log("Register successful:", data);
+        saveUsername(username);
         navigate("/main-menu");
       } else {
         const errorData = await response.json();
