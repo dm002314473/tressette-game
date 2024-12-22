@@ -62,29 +62,6 @@ function LeaderboardPage() {
     navigate("/stats");
   };
 
-  const fetchLeaderboard = async (category) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch(
-        `http://localhost:5000/api/leaderboard/${category}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch leaderboard data");
-      }
-      const data = await response.json();
-      setLeaderboards((prev) => ({ ...prev, [category]: data }));
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchLeaderboard(activeCategory);
-  }, [activeCategory]);
-
   const renderLeaderboard = () => {
     if (loading) return <p>Učitavanje ljestvice...</p>;
     if (error) return <p className="error-message">{error}</p>;

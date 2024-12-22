@@ -24,7 +24,9 @@ function MyStatsPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch("http://localhost:5000/api/my-stats");
+      const response = await fetch(
+        "http://localhost:5000/api/leaderboard/stats/my-stats"
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch your statistics.");
       }
@@ -55,20 +57,21 @@ function MyStatsPage() {
           <p className="error-message">{error}</p>
         ) : (
           <div className="leaderboard-stats">
-            <div className="stat-block">
-              Broj pobjeda ukupno: {stats.totalWins}
-            </div>
-            <div className="stat-block">
-              Broj pobjeda 1v1: {stats.oneVsOneWins}
-            </div>
-            <div className="stat-block">
-              Broj pobjeda 2v2: {stats.twoVsTwoWins}
-            </div>
-            <div className="stat-block">
-              Postotak pobjeda: {stats.winPercentage}%
-            </div>
+            <div className="stat-block">Broj pobjeda ukupno:</div>
+            <div className="stat-block">Broj pobjeda 1v1:</div>
+            <div className="stat-block">Broj pobjeda 2v2:</div>
+            <div className="stat-block">Postotak pobjeda: %</div>
           </div>
         )}
+      </div>
+      <div className="leaderboard-my-stats">
+        <div className="player-row">
+          <div className="player-stat">{username}</div>
+          <div className="player-stat">12</div>
+          <div className="player-stat">5</div>
+          <div className="player-stat">7</div>
+          <div className="player-stat">64%</div>
+        </div>
       </div>
     </div>
   );
