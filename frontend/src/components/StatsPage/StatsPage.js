@@ -2,7 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./StatsPage.css";
 
+import { useUser } from "../globalUsername/userContext";
+
 function StatsPage() {
+  const { username } = useUser();
+  console.log(username);
   const navigate = useNavigate();
 
   const handleBack = () => {

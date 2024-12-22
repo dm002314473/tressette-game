@@ -7,6 +7,6 @@ const {
 const router = express.Router();
 
 router.get("/stats/leaderboard", LeaderboardFetch);
-router.get("/stats/my-stats", MyStats);
+router.get("/stats/my-stats/:username", MyStats);
 
 module.exports = router;

@@ -5,6 +5,12 @@ import { useUser } from "../globalUsername/userContext";
 
 function MyStatsPage() {
   const { username } = useUser();
+  console.log(username);
+  const [playerToFind, setPlayerToFind] = useState({ username: username });
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [stats, setStats] = useState({
     totalWins: 0,
     oneVsOneWins: 0,
@@ -20,28 +26,50 @@ function MyStatsPage() {
     navigate("/stats");
   };
 
-  const fetchMyStats = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch(
-        "http://localhost:5000/api/leaderboard/stats/my-stats"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch your statistics.");
+  useEffect(() => {
+    const fetchMyStats = async () => {
+      if (!username) return;
+      try {
+        setLoading(true);
+        setError(null);
+        console.log("Username:", username);
+
+        const response = await fetch(
+          `http://localhost:5000/api/leaderboard/stats/my-stats/${username}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Response data:", response.data);
+
+        if (response.ok) {
+          const playerData = await response.json();
+          setPlayerToFind(playerData);
+        } else {
+          const errorData = await response.json();
+          console.error("data fetch failed:", errorData);
+          setErrorMessage("Please try again.");
+          setShowPopup(true);
+        }
+      } catch (error) {
+        console.error("Error occurred during fetching:", error);
+        setErrorMessage("Please try again later.");
+        setShowPopup(true);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchMyStats();
+  }, [username]);
 
   useEffect(() => {
-    fetchMyStats();
-  }, []);
+    setPlayerToFind({ username });
+  }, [username]);
 
   return (
     <div className="leaderboard-container">
@@ -66,11 +94,13 @@ function MyStatsPage() {
       </div>
       <div className="leaderboard-my-stats">
         <div className="player-row">
-          <div className="player-stat">{username}</div>
-          <div className="player-stat">12</div>
-          <div className="player-stat">5</div>
-          <div className="player-stat">7</div>
-          <div className="player-stat">64%</div>
+          <div className="player-stat">{playerToFind.username}</div>
+          <div className="player-stat">{playerToFind.stats?.totalWins}</div>
+          <div className="player-stat">{playerToFind.stats?.win1v1}</div>
+          <div className="player-stat">{playerToFind.stats?.win2v2}</div>
+          <div className="player-stat">
+            {playerToFind.stats?.winPercentage}%
+          </div>
         </div>
       </div>
     </div>
