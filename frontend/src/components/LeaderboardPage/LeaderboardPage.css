@@ -75,6 +75,17 @@
   flex-wrap: wrap;
 }
 
+.username-block {
+  background-color: #5c4033;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+}
+
 .stat-block {
   background-color: #4a7c59;
   color: #ffffff;
@@ -137,19 +148,6 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-}
-
-.player-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  align-items: center;
-  background-color: #5c4033;
-  color: #ffffff;
-  padding: 15px 0;
-  border-radius: 5px;
-  font-size: 18px;
-  width: 80%;
-  text-align: center;
 }
 
 .player-stat {

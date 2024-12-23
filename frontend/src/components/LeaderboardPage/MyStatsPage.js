@@ -79,29 +79,29 @@ function MyStatsPage() {
 
       <div className="leaderboard-content">
         <h1 className="main-title">Moja statistika</h1>
+        <div className="username-block">
+          <h2>{playerToFind.username}</h2>
+        </div>
         {loading ? (
           <p className="loading-message">Učitavanje podataka...</p>
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : (
           <div className="leaderboard-stats">
-            <div className="stat-block">Broj pobjeda ukupno:</div>
-            <div className="stat-block">Broj pobjeda 1v1:</div>
-            <div className="stat-block">Broj pobjeda 2v2:</div>
-            <div className="stat-block">Postotak pobjeda: %</div>
+            <div className="stat-block">
+              Broj pobjeda ukupno: {playerToFind.stats?.totalWins}
+            </div>
+            <div className="stat-block">
+              Broj pobjeda 1v1: {playerToFind.stats?.win1v1}
+            </div>
+            <div className="stat-block">
+              Broj pobjeda 2v2: {playerToFind.stats?.win2v2}
+            </div>
+            <div className="stat-block">
+              Postotak pobjeda: {playerToFind.stats?.winPercentage}%
+            </div>
           </div>
         )}
-      </div>
-      <div className="leaderboard-my-stats">
-        <div className="player-row">
-          <div className="player-stat">{playerToFind.username}</div>
-          <div className="player-stat">{playerToFind.stats?.totalWins}</div>
-          <div className="player-stat">{playerToFind.stats?.win1v1}</div>
-          <div className="player-stat">{playerToFind.stats?.win2v2}</div>
-          <div className="player-stat">
-            {playerToFind.stats?.winPercentage}%
-          </div>
-        </div>
       </div>
     </div>
   );
