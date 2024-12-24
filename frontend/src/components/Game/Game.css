@@ -1,0 +1,112 @@
+/* App.css (CSS for Game UI Layout) */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #2c3e3f;
+  color: #fff;
+  position: relative;
+  font-family: Arial, sans-serif;
+  justify-content: center;
+  align-items: center;
+}
+
+.exit-button,
+.help-button {
+  position: absolute;
+  top: 20px;
+  background-color: #5c4033;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.exit-button {
+  left: 20px;
+}
+
+.help-button {
+  right: 20px;
+}
+
+.player-cards,
+.table-cards,
+.score,
+.my-cards {
+  background-color: #4a7c59;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px;
+  text-align: center;
+}
+
+.player3,
+.player2,
+.player4 {
+  position: absolute;
+}
+
+.player3 {
+  top: 10%;
+}
+
+.player2 {
+  top: 40%;
+  right: 10%;
+}
+
+.player4 {
+  top: 40%;
+  left: 10%;
+}
+
+.table-cards {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.opponent-score {
+  position: absolute;
+  left: 20%;
+  bottom: 30%;
+}
+
+.my-score {
+  position: absolute;
+  right: 20%;
+  bottom: 30%;
+}
+
+.my-cards {
+  position: absolute;
+  bottom: 10%;
+  width: 70%;
+}
+
+.action-buttons {
+  position: absolute;
+  right: 10%;
+  bottom: 15%;
+  display: flex;
+  gap: 15px;
+}
+
+.action-btn {
+  background-color: #4a7c59;
+  color: #ffffff;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #3a6247;
+}
