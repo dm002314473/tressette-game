@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./JoinGame.css";
+import { useUser } from "../globalUsername/userContext";
+
+// TODO: list public games in JoinGamePage, open /game/id page
 
 function JoinGame() {
+  const { userData } = useUser();
+  console.log(userData);
+
   const [joinCode, setJoinCode] = useState("");
   const [isPublicGame, setIsPublicGame] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
@@ -23,7 +29,9 @@ function JoinGame() {
         try {
           // API call for getting public games by selected playerCount
           // GET http://localhost:5000/api/games?playerCount=${playerCount}
-          const response = await fetch(`/api/games?playerCount=${playerCount}`);
+          const response = await fetch(
+            `http://localhost:5000/api/games?playerCount=${playerCount}`
+          );
           if (!response.ok) {
             throw new Error("Failed to fetch public games");
           }
@@ -46,7 +54,7 @@ function JoinGame() {
       if (isPublicGame) {
         if (selectedGame) {
           // API GET: http://localhost:5000/api/games/join
-          const response = await fetch(`/api/games/join`, {
+          const response = await fetch(`http://localhost:5000/api/games/join`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ gameId: selectedGame.id }),
@@ -60,11 +68,15 @@ function JoinGame() {
         }
       } else {
         // API GET: http://localhost:5000/api/games/join-by-code
-        const response = await fetch(`/api/games/join-by-code`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code: joinCode }),
-        });
+        console.log({ gameCode: joinCode, userId: userData.id });
+        const response = await fetch(
+          `http://localhost:5000/api/games/join-by-code`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ gameCode: joinCode, userId: userData.id }),
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to join private game");
         }
