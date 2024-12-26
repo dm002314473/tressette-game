@@ -79,4 +79,37 @@ const JoinGame = async (req, res) => {
   }
 };
 
-module.exports = { CreateGame, JoinGame };
+const JoinGameByCode = async (req, res) => {
+  try {
+    const { gameCode, userId } = req.body;
+
+    if (!gameCode || !userId) {
+      return res.status(400).json({ message: "Sva polja su obavezna" });
+    }
+
+    const game = await Game.findOne({ joinCode: gameCode });
+    if (!game) {
+      return res.status(404).json({ message: "Igra ne postoji" });
+    }
+
+    const isAlreadyInGame = game.players.some(
+      (player) => player.userId.toString() === userId
+    );
+    if (isAlreadyInGame) {
+      return res.status(400).json({ message: "Korisnik je već u igri" });
+    }
+
+    const user = await User.findById(userId);
+    game.players.push({ userId, username: user.username, isReady: false });
+    await game.save();
+
+    return res
+      .status(200)
+      .json({ message: "Uspješno ste pridruženi igri", gameId: game.gameId });
+  } catch (error) {
+    console.error("Greška pri pridruživanju igri: ", error);
+    return res.status(500).json({ message: "Greška na serveru." });
+  }
+};
+
+module.exports = { CreateGame, JoinGame, JoinGameByCode };
