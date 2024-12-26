@@ -75,12 +75,48 @@
   flex-wrap: wrap;
 }
 
+.username-block {
+  background-color: #5c4033;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+}
+
 .stat-block {
   background-color: #4a7c59;
   color: #ffffff;
-  padding: 10px 20px;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
   border-radius: 5px;
-  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 3rem;
+}
+
+.stat-button {
+  background-color: #4a7c59;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 3rem;
+}
+
+.stat-button:hover {
+  background-color: #3d6c4b;
+  transform: scale(1.05);
+}
+
+.stat-button.selected {
+  background-color: #355e40;
+  transform: scale(1.1);
 }
 
 .leaderboard-players {
@@ -104,4 +140,21 @@
   font-size: 16px;
   width: 80%;
   text-align: center;
+}
+
+.leaderboard-my-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.player-stat {
+  padding: 8px 0;
+  border-right: 1px solid #4a2f24;
+}
+
+.player-stat:last-child {
+  border-right: none;
 }

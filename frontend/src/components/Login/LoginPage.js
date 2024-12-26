@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import { useUser } from "../globalUsername/userContext";
 
 function Login() {
+  const { setUsername: saveUsername } = useUser();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,6 +33,8 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
+        saveUsername(username);
+        console.log(username);
         navigate("/main-menu");
       } else {
         const errorData = await response.json();

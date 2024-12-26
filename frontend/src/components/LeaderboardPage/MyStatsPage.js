@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LeaderboardPage.css";
+import { useUser } from "../globalUsername/userContext";
 
 function MyStatsPage() {
+  const { username } = useUser();
+  console.log(username);
+  const [playerToFind, setPlayerToFind] = useState({ username: username });
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [stats, setStats] = useState({
     totalWins: 0,
     oneVsOneWins: 0,
@@ -18,26 +26,50 @@ function MyStatsPage() {
     navigate("/stats");
   };
 
-  const fetchMyStats = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch("http://localhost:5000/api/my-stats");
-      if (!response.ok) {
-        throw new Error("Failed to fetch your statistics.");
+  useEffect(() => {
+    const fetchMyStats = async () => {
+      if (!username) return;
+      try {
+        setLoading(true);
+        setError(null);
+        console.log("Username:", username);
+
+        const response = await fetch(
+          `http://localhost:5000/api/leaderboard/stats/my-stats/${username}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Response data:", response.data);
+
+        if (response.ok) {
+          const playerData = await response.json();
+          setPlayerToFind(playerData);
+        } else {
+          const errorData = await response.json();
+          console.error("data fetch failed:", errorData);
+          setErrorMessage("Please try again.");
+          setShowPopup(true);
+        }
+      } catch (error) {
+        console.error("Error occurred during fetching:", error);
+        setErrorMessage("Please try again later.");
+        setShowPopup(true);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      setStats(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchMyStats();
+  }, [username]);
 
   useEffect(() => {
-    fetchMyStats();
-  }, []);
+    setPlayerToFind({ username });
+  }, [username]);
 
   return (
     <div className="leaderboard-container">
@@ -47,6 +79,9 @@ function MyStatsPage() {
 
       <div className="leaderboard-content">
         <h1 className="main-title">Moja statistika</h1>
+        <div className="username-block">
+          <h2>{playerToFind.username}</h2>
+        </div>
         {loading ? (
           <p className="loading-message">Učitavanje podataka...</p>
         ) : error ? (
@@ -54,16 +89,16 @@ function MyStatsPage() {
         ) : (
           <div className="leaderboard-stats">
             <div className="stat-block">
-              Broj pobjeda ukupno: {stats.totalWins}
+              Broj pobjeda ukupno: {playerToFind.stats?.totalWins}
             </div>
             <div className="stat-block">
-              Broj pobjeda 1v1: {stats.oneVsOneWins}
+              Broj pobjeda 1v1: {playerToFind.stats?.win1v1}
             </div>
             <div className="stat-block">
-              Broj pobjeda 2v2: {stats.twoVsTwoWins}
+              Broj pobjeda 2v2: {playerToFind.stats?.win2v2}
             </div>
             <div className="stat-block">
-              Postotak pobjeda: {stats.winPercentage}%
+              Postotak pobjeda: {playerToFind.stats?.winPercentage}%
             </div>
           </div>
         )}
