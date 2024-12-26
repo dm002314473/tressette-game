@@ -66,7 +66,7 @@ const LoginUser = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "Prijava uspješna.", user: user.username });
+      .json({ message: "Prijava uspješna.", user: user.username, id: user.id });
   } catch (error) {
     console.error("Greška prilikom prijave: ", error);
     return res.status(500).json({ message: "Greška na serveru." });

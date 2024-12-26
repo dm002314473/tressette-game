@@ -4,9 +4,11 @@ import "./LeaderboardPage.css";
 import { useUser } from "../globalUsername/userContext";
 
 function MyStatsPage() {
-  const { username } = useUser();
-  console.log(username);
-  const [playerToFind, setPlayerToFind] = useState({ username: username });
+  const { userData } = useUser();
+  console.log(userData);
+  const [playerToFind, setPlayerToFind] = useState({
+    username: userData.user,
+  });
 
   const [showPopup, setShowPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,14 +30,14 @@ function MyStatsPage() {
 
   useEffect(() => {
     const fetchMyStats = async () => {
-      if (!username) return;
+      if (!userData.user) return;
       try {
         setLoading(true);
         setError(null);
-        console.log("Username:", username);
+        console.log("Username:", userData.user);
 
         const response = await fetch(
-          `http://localhost:5000/api/leaderboard/stats/my-stats/${username}`,
+          `http://localhost:5000/api/leaderboard/stats/my-stats/${userData.user}`,
           {
             method: "GET",
             headers: {
@@ -65,11 +67,12 @@ function MyStatsPage() {
     };
 
     fetchMyStats();
-  }, [username]);
+  }, [userData.user]);
 
   useEffect(() => {
+    const username = userData.user;
     setPlayerToFind({ username });
-  }, [username]);
+  }, [userData.user]);
 
   return (
     <div className="leaderboard-container">

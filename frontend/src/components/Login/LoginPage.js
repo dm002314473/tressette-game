@@ -4,7 +4,7 @@ import "./LoginPage.css";
 import { useUser } from "../globalUsername/userContext";
 
 function Login() {
-  const { setUsername: saveUsername } = useUser();
+  const { setUserData: saveUserData } = useUser();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -32,9 +32,8 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful:", data);
-        saveUsername(username);
-        console.log(username);
+        console.log("Login successful:", data.username, data.id);
+        saveUserData(data);
         navigate("/main-menu");
       } else {
         const errorData = await response.json();

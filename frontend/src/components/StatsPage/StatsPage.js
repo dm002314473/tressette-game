@@ -5,8 +5,8 @@ import "./StatsPage.css";
 import { useUser } from "../globalUsername/userContext";
 
 function StatsPage() {
-  const { username } = useUser();
-  console.log(username);
+  const { userData } = useUser();
+  console.log(userData);
   const navigate = useNavigate();
 
   const handleBack = () => {

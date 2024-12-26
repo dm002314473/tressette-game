@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./CreateGamePage.css";
+import { useUser } from "../globalUsername/userContext";
 
 function CreateGamePage() {
+  const { userData } = useUser();
+
   const [playerCount, setPlayerCount] = useState(null);
   const [gameType, setGameType] = useState(null);
   const [error, setError] = useState(null);
@@ -31,7 +34,7 @@ function CreateGamePage() {
       }
 
       // Set userId from auth data
-      const userId = "6762dbcd566edd7283664cf8";
+      const userId = userData.id;
 
       const response = await axios.post(
         "http://localhost:5000/api/games/create",

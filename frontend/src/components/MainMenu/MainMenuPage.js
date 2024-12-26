@@ -4,8 +4,8 @@ import "./MainMenuPage.css";
 import { useUser } from "../globalUsername/userContext";
 
 function MainMenuPage() {
-  const { username } = useUser();
-  console.log(username);
+  const { userData } = useUser();
+  console.log(userData);
   const navigate = useNavigate();
 
   const handleExit = () => {

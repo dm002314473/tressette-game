@@ -4,7 +4,7 @@ import "./LoginPage.css";
 import { useUser } from "../globalUsername/userContext";
 
 function RegistrationPage() {
-  const { setUsername: saveUsername } = useUser();
+  const { setUserData: saveUserData } = useUser();
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -42,7 +42,7 @@ function RegistrationPage() {
       if (response.ok) {
         const data = await response.json();
         console.log("Register successful:", data);
-        saveUsername(username);
+        saveUserData(data);
         navigate("/main-menu");
       } else {
         const errorData = await response.json();
