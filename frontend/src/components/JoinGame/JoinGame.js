@@ -8,6 +8,8 @@ function JoinGame() {
   const [playerCount, setPlayerCount] = useState(2);
   const [gameList, setGameList] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 

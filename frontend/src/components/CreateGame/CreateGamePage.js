@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./CreateGamePage.css";
 
 function CreateGamePage() {
   const [playerCount, setPlayerCount] = useState(null);
   const [gameType, setGameType] = useState(null);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -20,10 +23,35 @@ function CreateGamePage() {
     setGameType(type);
   };
 
-  const handleCreateGameClick = () => {
-    console.log("New Game Created");
-    // TODO
-    // create api call to backend to create a new game
+  const handleCreateGameClick = async () => {
+    try {
+      if (!playerCount || !gameType) {
+        setError("Morate odabrati broj igrača i tip igre");
+        return;
+      }
+
+      // Set userId from auth data
+      const userId = "6762dbcd566edd7283664cf8";
+
+      const response = await axios.post(
+        "http://localhost:5000/api/games/create",
+        {
+          userId,
+          type: playerCount === 2 ? "2-players" : "4-players",
+          isPrivate: gameType === "Privatna",
+        }
+      );
+
+      setSuccessMessage("Igra uspješno stvorena");
+      console.log("Game created successfully: ", response.data);
+
+      setTimeout(() => {
+        navigate("/game/" + response.data.gameId);
+      }, 1500);
+    } catch (error) {
+      console.error("Error creating game:", error);
+      setError("Došlo je do pogreške pri stvaranju igre.");
+    }
   };
 
   return (
