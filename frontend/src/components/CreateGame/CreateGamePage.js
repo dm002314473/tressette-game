@@ -40,7 +40,7 @@ function CreateGamePage() {
         "http://localhost:5000/api/games/create",
         {
           userId,
-          type: playerCount === 2 ? "2-players" : "4-players",
+          type: playerCount === 2 ? "2" : "4",
           isPrivate: gameType === "Privatna",
         }
       );
@@ -49,7 +49,7 @@ function CreateGamePage() {
       console.log("Game created successfully: ", response.data);
 
       setTimeout(() => {
-        navigate("/game/" + response.data.gameId);
+        navigate("/game/" + response.data._id);
       }, 1500);
     } catch (error) {
       console.error("Error creating game:", error);

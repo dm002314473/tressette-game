@@ -23,7 +23,7 @@ const gameSchema = new mongoose.Schema({
     enum: ["waiting", "ongoing", "finished"],
     default: "waiting",
   },
-  type: { type: String, enum: ["2-players", "4-players"], required: true },
+  type: { type: String, enum: ["2", "4"], required: true },
   isPrivate: { type: Boolean, default: false },
   joinCode: { type: String },
   createdAt: { type: Date, default: Date.now },

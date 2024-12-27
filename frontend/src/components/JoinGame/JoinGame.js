@@ -13,7 +13,6 @@ function JoinGame() {
   const [isPublicGame, setIsPublicGame] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
   const [gameList, setGameList] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,16 +26,15 @@ function JoinGame() {
     if (isPublicGame) {
       const fetchPublicGames = async () => {
         try {
-          // API call for getting public games by selected playerCount
-          // GET http://localhost:5000/api/games?playerCount=${playerCount}
           const response = await fetch(
-            `http://localhost:5000/api/games?playerCount=${playerCount}`
+            `http://localhost:5000/api/games/public/${playerCount}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch public games");
           }
           const data = await response.json();
           setGameList(data);
+          console.log(data);
         } catch (error) {
           console.error("Error fetching public games:", error);
           setGameList([]);
@@ -52,19 +50,26 @@ function JoinGame() {
   const handleJoinGame = async () => {
     try {
       if (isPublicGame) {
-        if (selectedGame) {
+        console.log("gamelist id: ", gameList[0]._id);
+        console.log("user id: ", userData.id);
+        if (gameList[0]) {
           // API GET: http://localhost:5000/api/games/join
           const response = await fetch(`http://localhost:5000/api/games/join`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ gameId: selectedGame.id }),
+            body: JSON.stringify({
+              gameId: gameList[0]._id,
+              userId: userData.id,
+            }),
           });
           if (!response.ok) {
             throw new Error("Failed to join public game");
           }
-          alert(`Successfully joined public game: ${selectedGame.name}`);
-        } else {
-          alert("Molimo odaberite igru prije pridruživanja.");
+          alert(`Successfully joined public game`);
+
+          setTimeout(() => {
+            navigate("/game/" + gameList[0]._id);
+          }, 1500);
         }
       } else {
         // API GET: http://localhost:5000/api/games/join-by-code
@@ -81,6 +86,11 @@ function JoinGame() {
           throw new Error("Failed to join private game");
         }
         alert("Successfully joined the private game");
+
+        // find the right id to navigate to
+        setTimeout(() => {
+          navigate("/game/" + response.data._id);
+        }, 1500);
       }
     } catch (error) {
       console.error("Error joining game:", error);
@@ -142,22 +152,11 @@ function JoinGame() {
         </div>
         {isPublicGame && (
           <div>
-            <h3>Lista dostupnih igara</h3>
-            <ul>
-              {gameList.length > 0 ? (
-                gameList.map((game) => (
-                  <li
-                    key={game.id}
-                    onClick={() => setSelectedGame(game)}
-                    className={selectedGame?.id === game.id ? "selected" : ""}
-                  >
-                    {game.name} - {game.players} igrača
-                  </li>
-                ))
-              ) : (
-                <li>Nema dostupnih igara</li>
-              )}
-            </ul>
+            {gameList.length > 0 ? (
+              console.log("")
+            ) : (
+              <li>Nema dostupnih igara</li>
+            )}
           </div>
         )}
         <button className="join-button" onClick={handleJoinGame}>

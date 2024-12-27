@@ -10,7 +10,7 @@ const CreateGame = async (req, res) => {
       return res.status(400).json({ message: "Sva polja su obavezna" });
     }
 
-    const validTypes = ["2-players", "4-players"];
+    const validTypes = ["2", "4"];
     if (!validTypes.includes(type)) {
       return res.status(400).json({ message: "Neispravan tip igre" });
     }
@@ -39,7 +39,7 @@ const CreateGame = async (req, res) => {
 
     return res
       .status(201)
-      .json({ message: "Igra uspješno kreirana", gameId: newGame.gameId });
+      .json({ message: "Igra uspješno kreirana", _id: newGame._id });
   } catch (error) {
     console.error("Greška pri kreiranju igre: ", error);
     return res.status(500).json({ message: "Greška na serveru." });
@@ -54,7 +54,7 @@ const JoinGame = async (req, res) => {
       return res.status(400).json({ message: "Sva polja su obavezna" });
     }
 
-    const game = await Game.findOne({ gameId });
+    const game = await Game.findOne({ _id: gameId });
     if (!game) {
       return res.status(404).json({ message: "Igra ne postoji" });
     }
@@ -112,4 +112,25 @@ const JoinGameByCode = async (req, res) => {
   }
 };
 
-module.exports = { CreateGame, JoinGame, JoinGameByCode };
+const FetchPublicGames = async (req, res) => {
+  try {
+    const { playerCount } = req.params;
+
+    if (!playerCount) {
+      return res.status(400).json({ message: "Sva polja su obavezna" });
+    }
+
+    const sortCriteria = { createdAt: 1 };
+
+    const publicGames = await Game.find({ type: playerCount })
+      .sort(sortCriteria)
+      .limit(1);
+
+    res.status(200).json(publicGames);
+  } catch (error) {
+    console.error("Error fetching public games:", error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+module.exports = { CreateGame, JoinGame, JoinGameByCode, FetchPublicGames };
