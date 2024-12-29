@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./JoinGame.css";
 import { useUser } from "../globalUsername/userContext";
 
-// TODO: list public games in JoinGamePage, open /game/id page
+// TODO: open /game/id page
 
 function JoinGame() {
   const { userData } = useUser();
@@ -13,8 +13,6 @@ function JoinGame() {
   const [isPublicGame, setIsPublicGame] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
   const [gameList, setGameList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -87,9 +85,11 @@ function JoinGame() {
         }
         alert("Successfully joined the private game");
 
-        // find the right id to navigate to
+        const data = await response.json();
+
+        console.log("response data", data.gameId);
         setTimeout(() => {
-          navigate("/game/" + response.data._id);
+          navigate("/game/" + data.gameId);
         }, 1500);
       }
     } catch (error) {

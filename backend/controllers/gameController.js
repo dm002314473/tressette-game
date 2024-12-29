@@ -105,7 +105,7 @@ const JoinGameByCode = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "Uspješno ste pridruženi igri", gameId: game.gameId });
+      .json({ message: "Uspješno ste pridruženi igri", gameId: game._id });
   } catch (error) {
     console.error("Greška pri pridruživanju igri: ", error);
     return res.status(500).json({ message: "Greška na serveru." });

@@ -33,7 +33,6 @@ function CreateGamePage() {
         return;
       }
 
-      // Set userId from auth data
       const userId = userData.id;
 
       const response = await axios.post(
