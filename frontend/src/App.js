@@ -10,6 +10,8 @@ import LeaderboardPage from "./components/LeaderboardPage/LeaderboardPage";
 import RulesPage from "./components/RulesPage/RulesPage";
 import StatsPage from "./components/StatsPage/StatsPage";
 import MyStatsPage from "./components/LeaderboardPage/MyStatsPage";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import EnterNewPasswordPage from "./components/ResetPassword/EnterNewPasswordPage";
 
 function App() {
   useEffect(() => {
@@ -30,6 +32,8 @@ function App() {
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/stats/leaderboard" element={<LeaderboardPage />} />
         <Route path="/stats/my-stats" element={<MyStatsPage />} />
+        <Route path="/reset-password/enter-mail" element={<ResetPassword />} />
+        <Route path="/reset-password" element={<EnterNewPasswordPage />} />
       </Routes>
     </div>
   );

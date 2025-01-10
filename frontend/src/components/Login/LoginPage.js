@@ -56,6 +56,10 @@ function Login() {
     setShowPopup(false);
   };
 
+  const handleResetPassword = () => {
+    navigate("/reset-password/enter-mail");
+  };
+
   return (
     <div className="Login">
       <h2>Login</h2>
@@ -82,6 +86,12 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <p>
+        Forgot password?{" "}
+        <span className="ForgotPassword" onClick={handleResetPassword}>
+          Reset password?
+        </span>
+      </p>
       <p>
         Don't have an account?{" "}
         <span className="SignUp" onClick={handleSignUp}>
