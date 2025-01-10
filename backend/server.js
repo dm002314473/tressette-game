@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth");
 const gameRoutes = require("./routes/gameRoutes");
 const leaderboardRoutes = require("./routes/leaderboardRoute");
 const initGamePlaySocket = require("./sockets/gameplaySocket");
+const resetPasswordRoutes = require("./routes/resetPasswordRoute");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/games", gameRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/reset-password", resetPasswordRoutes);
 
 connectDB();
 
