@@ -10,6 +10,7 @@ import LeaderboardPage from "./components/LeaderboardPage/LeaderboardPage";
 import RulesPage from "./components/RulesPage/RulesPage";
 import StatsPage from "./components/StatsPage/StatsPage";
 import MyStatsPage from "./components/LeaderboardPage/MyStatsPage";
+import GamePage from "./components/GamePage/gamePage";
 
 function App() {
   useEffect(() => {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/stats/leaderboard" element={<LeaderboardPage />} />
         <Route path="/stats/my-stats" element={<MyStatsPage />} />
+        <Route path="/game/:id" element={<GamePage />} />
       </Routes>
     </div>
   );

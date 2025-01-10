@@ -27,12 +27,20 @@ const CreateGame = async (req, res) => {
     const newGame = new Game({
       gameId: new mongoose.Types.ObjectId().toString(),
       createdBy: userId,
-      players: [{ userId, username: user.username, isReady: false }],
+      players: [
+        {
+          userId,
+          username: user.username,
+          isReady: false,
+          socketId: "",
+          hand: [],
+        },
+      ],
+      status: "waiting",
       type,
       isPrivate,
       joinCode,
       createdAt: new Date(),
-      status: "waiting",
     });
 
     await newGame.save();
@@ -68,6 +76,9 @@ const JoinGame = async (req, res) => {
 
     const user = await User.findById(userId);
     game.players.push({ userId, username: user.username, isReady: false });
+
+    if (game.players.length === Number(game.type)) game.status = "active";
+
     await game.save();
 
     return res
@@ -92,6 +103,10 @@ const JoinGameByCode = async (req, res) => {
       return res.status(404).json({ message: "Igra ne postoji" });
     }
 
+    if (game.players.length === Number(game.type)) {
+      return res.status(404).json({ message: "Igra je puna" });
+    }
+
     const isAlreadyInGame = game.players.some(
       (player) => player.userId.toString() === userId
     );
@@ -101,6 +116,9 @@ const JoinGameByCode = async (req, res) => {
 
     const user = await User.findById(userId);
     game.players.push({ userId, username: user.username, isReady: false });
+
+    if (game.players.length === Number(game.type)) game.status = "active";
+
     await game.save();
 
     return res
@@ -122,11 +140,20 @@ const FetchPublicGames = async (req, res) => {
 
     const sortCriteria = { createdAt: 1 };
 
-    const publicGames = await Game.find({ type: playerCount })
-      .sort(sortCriteria)
-      .limit(1);
+    const publicGames = await Game.find({
+      type: playerCount,
+      isPrivate: false,
+    }).sort(sortCriteria);
 
-    res.status(200).json(publicGames);
+    console.log(publicGames);
+
+    const currentPublicGame = publicGames.find(
+      (game) => game.status === "waiting"
+    );
+
+    console.log("current public game: ", currentPublicGame);
+
+    res.status(200).json(currentPublicGame);
   } catch (error) {
     console.error("Error fetching public games:", error);
     res.status(500).json({ message: "Server error." });

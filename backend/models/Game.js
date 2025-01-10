@@ -16,11 +16,20 @@ const gameSchema = new mongoose.Schema({
       },
       username: { type: String, required: true },
       isReady: { type: Boolean, default: false },
+      socketId: { type: String, required: false },
+      hand: [
+        {
+          suits: { type: String, required: false },
+          values: { type: String, required: false },
+          points: { type: String, required: false },
+          trueValue: { type: String, required: false },
+        },
+      ],
     },
   ],
   status: {
     type: String,
-    enum: ["waiting", "ongoing", "finished"],
+    enum: ["waiting", "active", "finished"],
     default: "waiting",
   },
   type: { type: String, enum: ["2", "4"], required: true },

@@ -12,7 +12,7 @@ function JoinGame() {
   const [joinCode, setJoinCode] = useState("");
   const [isPublicGame, setIsPublicGame] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
-  const [gameList, setGameList] = useState([]);
+  const [gameList, setGameList] = useState({});
 
   const navigate = useNavigate();
 
@@ -32,31 +32,31 @@ function JoinGame() {
           }
           const data = await response.json();
           setGameList(data);
-          console.log(data);
+          console.log("data: ", data);
         } catch (error) {
           console.error("Error fetching public games:", error);
-          setGameList([]);
+          setGameList({});
         }
       };
 
       fetchPublicGames();
     } else {
-      setGameList([]);
+      setGameList({});
     }
   }, [isPublicGame, playerCount]);
 
   const handleJoinGame = async () => {
     try {
       if (isPublicGame) {
-        console.log("gamelist id: ", gameList[0]._id);
+        console.log("gamelist id: ", gameList._id);
         console.log("user id: ", userData.id);
-        if (gameList[0]) {
-          // API GET: http://localhost:5000/api/games/join
+        console.log("gameList: ", gameList);
+        if (gameList) {
           const response = await fetch(`http://localhost:5000/api/games/join`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              gameId: gameList[0]._id,
+              gameId: gameList._id,
               userId: userData.id,
             }),
           });
@@ -66,7 +66,7 @@ function JoinGame() {
           alert(`Successfully joined public game`);
 
           setTimeout(() => {
-            navigate("/game/" + gameList[0]._id);
+            navigate("/game/" + gameList._id);
           }, 1500);
         }
       } else {
@@ -94,7 +94,7 @@ function JoinGame() {
       }
     } catch (error) {
       console.error("Error joining game:", error);
-      alert("Došlo je do pogreške prilikom pridruživanja igri.");
+      alert("Nema dostupne igre.");
     }
   };
 
@@ -152,11 +152,7 @@ function JoinGame() {
         </div>
         {isPublicGame && (
           <div>
-            {gameList.length > 0 ? (
-              console.log("")
-            ) : (
-              <li>Nema dostupnih igara</li>
-            )}
+            {gameList ? console.log("") : <li>Nema dostupnih igara</li>}
           </div>
         )}
         <button className="join-button" onClick={handleJoinGame}>
