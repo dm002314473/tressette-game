@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 import "./JoinGame.css";
 import { useUser } from "../globalUsername/userContext";
 
-// TODO: open /game/id page
+const socket = io.connect("http://localhost:5000");
 
 function JoinGame() {
   const { userData } = useUser();
@@ -65,6 +66,11 @@ function JoinGame() {
           }
           alert(`Successfully joined public game`);
 
+          //emit joinGame event
+          if (userData !== "" && gameList._id !== "") {
+            socket.emit("joinGame", userData, gameList._id);
+          }
+
           setTimeout(() => {
             navigate("/game/" + gameList._id);
           }, 1500);
@@ -86,6 +92,11 @@ function JoinGame() {
         alert("Successfully joined the private game");
 
         const data = await response.json();
+
+        //emit joinGame event
+        if (userData !== "" && data.gameId !== "") {
+          socket.emit("joinGame", userData, data.gameId);
+        }
 
         console.log("response data", data.gameId);
         setTimeout(() => {

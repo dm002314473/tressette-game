@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import io from "socket.io-client";
 import "./CreateGamePage.css";
 import { useUser } from "../globalUsername/userContext";
+
+const socket = io.connect("http://localhost:5000");
 
 function CreateGamePage() {
   const { userData } = useUser();
@@ -46,6 +49,12 @@ function CreateGamePage() {
 
       setSuccessMessage("Igra uspješno stvorena");
       console.log("Game created successfully: ", response.data);
+
+      console.log("userData: ", userData);
+      //emit joinGame event
+      if (userData !== "" && response.data._id !== "") {
+        socket.emit("joinGame", userData, response.data._id);
+      }
 
       setTimeout(() => {
         navigate("/game/" + response.data._id);
