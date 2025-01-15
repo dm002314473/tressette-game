@@ -9,7 +9,8 @@ const GamePage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
 
   const sendMessage = async () => {
-    await socket.emit("sendMessage", id, currentMessage);
+    //novo nema currentMessage
+    await socket.emit("sendMessage", id);
   };
 
   useEffect(() => {

@@ -8,6 +8,10 @@ const initializeGames = async () => {
 };
 
 module.exports = (io) => {
+  //novo
+  const gameDeck = {};
+  const playerHands = {};
+
   io.on("connection", (socket) => {
     console.log("user connected: ", socket.id);
 
@@ -17,11 +21,16 @@ module.exports = (io) => {
       socket.join(gameId);
 
       console.log(`player ${socket.id} joined game ${gameId}`);
+
+      //novo
+      const deck = new Deck();
+      gameDeck[gameId] = deck.deal(2);
     });
 
-    socket.on("sendMessage", (roomId, message) => {
+    socket.on("sendMessage", (roomId) => {
       console.log(roomId);
-      socket.to(roomId).emit("receiveMessage", message);
+      //novo gameDeck
+      socket.to(roomId).emit("receiveMessage", gameDeck);
     });
 
     socket.on("disconnect", () => {
