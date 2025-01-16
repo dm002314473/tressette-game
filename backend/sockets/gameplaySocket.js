@@ -39,6 +39,7 @@ module.exports = (io) => {
         const socketIds = Array.from(room);
         console.log(`Sockets in room ${roomId}:`, socketIds);
         for (let i = 0; i < socketIds.length; i++) {
+          currentGame.players[i].socketId = socketIds[i];
           gameDeck[roomId]?.hands[i]?.forEach((element) => {
             element.playerId = socketIds[i];
           });

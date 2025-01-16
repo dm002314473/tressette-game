@@ -81,6 +81,22 @@ const GamePage = () => {
       </div>
 
       <div>
+        {gameData?.players?.map((player, playerIndex) => {
+          return (
+            <div key={player.userId || playerIndex}>
+              {socket.id !== player.socketId ? (
+                <p>
+                  <strong>player {player.username}</strong>
+                </p>
+              ) : (
+                <p></p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div>
         <h2>Remaining deck</h2>
         {cardsGameData?.remainingDeck?.map((card, index) => (
           <div key={index} style={{ marginBottom: "10px" }}>
