@@ -8,6 +8,7 @@ class Deck {
     const values = ["1", "2", "3", "4", "5", "6", "7", "11", "12", "13"];
     const points = [3, 1, 1, 0, 0, 0, 0, 1, 1, 1];
     const trueValue = [8, 10, 9, 1, 2, 3, 4, 5, 6, 7];
+    const playerId = "remainingDeck";
 
     const deck = [];
     for (let suit of suits) {
@@ -17,6 +18,7 @@ class Deck {
           value: values[i],
           points: points[i],
           trueValue: trueValue[i],
+          playerId: playerId,
         });
       }
     }
