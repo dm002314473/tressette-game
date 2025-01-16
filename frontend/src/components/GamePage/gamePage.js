@@ -9,6 +9,7 @@ const GamePage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [cardsGameData, setCardsGameData] = useState(null);
   const [gameData, setGameData] = useState(null);
+  console.log("id na frontu: ", id);
 
   const sendMessage = async () => {
     //novo nema currentMessage
@@ -50,46 +51,35 @@ const GamePage = () => {
           </p>
         )}
       </div>
+
       <div>
-        <h2>player {gameData?.players[0]?.username} deck</h2>
-        {cardsGameData?.hands[0]?.map((card, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
-            {socket.id === card.playerId ? (
-              <p>
-                <strong>Card {index + 1}:</strong> {card.value} of {card.suit}
-                <br />
-                <strong>Points:</strong> {card.points}
-                <br />
-                <strong>True Value:</strong> {card.trueValue}
-                <br />
-                <strong>Player ID:</strong> {card.playerId}
-              </p>
-            ) : (
-              <p>nisu tvoje karte</p>
-            )}
-          </div>
-        ))}
+        <h2>Your Deck</h2>
+        {gameData?.players?.map((player, playerIndex) => {
+          return (
+            <div key={player.userId || playerIndex}>
+              {cardsGameData?.hands[playerIndex]?.map((card, index) => (
+                <div key={index} style={{ marginBottom: "10px" }}>
+                  {socket.id === card.playerId ? (
+                    <p>
+                      <strong>Card {index + 1}:</strong> {card.value} of{" "}
+                      {card.suit}
+                      <br />
+                      <strong>Points:</strong> {card.points}
+                      <br />
+                      <strong>True Value:</strong> {card.trueValue}
+                      <br />
+                      <strong>Player ID:</strong> {card.playerId}
+                    </p>
+                  ) : (
+                    <p></p>
+                  )}
+                </div>
+              ))}
+            </div>
+          );
+        })}
       </div>
-      <div>
-        <h2>player {gameData?.players[1]?.username} deck</h2>
-        {cardsGameData?.hands[1]?.map((card, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
-            {socket.id === card.playerId ? (
-              <p>
-                <strong>Card {index + 1}:</strong> {card.value} of {card.suit}
-                <br />
-                <strong>Points:</strong> {card.points}
-                <br />
-                <strong>True Value:</strong> {card.trueValue}
-                <br />
-                <strong>Player ID:</strong> {card.playerId}
-              </p>
-            ) : (
-              <p>nisu tvoje karte</p>
-            )}
-          </div>
-        ))}
-      </div>
+
       <div>
         <h2>Remaining deck</h2>
         {cardsGameData?.remainingDeck?.map((card, index) => (

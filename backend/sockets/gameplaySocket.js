@@ -22,35 +22,31 @@ module.exports = (io) => {
       socket.join(gameId);
 
       console.log(`player ${socket.id} joined game ${gameId}`);
-
-      //novo
-      currentGame = await Game.findOne({ _id: gameId });
-      console.log("current game: ", currentGame);
-
-      //novo
-      const deck = new Deck();
-      gameDeck[gameId] = deck.deal(2);
     });
 
-    socket.on("sendMessage", (roomId) => {
+    socket.on("sendMessage", async (roomId) => {
       console.log("roomId: ", roomId);
-      console.log(gameDeck[roomId].hands);
-      //novo
+
+      currentGame = await Game.findOne({ _id: roomId });
+      console.log("current game type: ", currentGame?.type);
+
+      const deck = new Deck();
+      gameDeck[roomId] = deck.deal(currentGame?.type); //deals 2 or 4 hands of cards based on game type(2/4 players)
+
+      //setting each card from hands id of player in which hands they are
       const room = io.sockets.adapter.rooms.get(roomId);
       if (room) {
         const socketIds = Array.from(room);
         console.log(`Sockets in room ${roomId}:`, socketIds);
-        gameDeck[roomId].hands[0].forEach((element) => {
-          element.playerId = socketIds[0];
-        });
-        gameDeck[roomId].hands[1].forEach((element) => {
-          element.playerId = socketIds[1];
-        });
+        for (let i = 0; i < socketIds.length; i++) {
+          gameDeck[roomId]?.hands[i]?.forEach((element) => {
+            element.playerId = socketIds[i];
+          });
+        }
       } else {
         console.log(`Room ${roomId} does not exist or is empty.`);
       }
-      //console.log("certain card: ", gameDeck[roomId].hands[0][0].suit); returns certain card from certain hand
-      //novo gameDeck(remaining deck, hands for player 1 and 2), currentGame(data from DB of game with _id: roomId)
+
       socket.to(roomId).emit("receiveMessage", gameDeck[roomId], currentGame);
     });
 
