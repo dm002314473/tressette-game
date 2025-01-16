@@ -1,0 +1,19 @@
+.remaining-deck {
+  position: relative;
+  width: 70px;
+  height: 90px;
+}
+
+.remaining-deck .card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.player-cards {
+  display: flex;
+  flex-wrap: wrap; /* Allow the cards to wrap onto the next line when necessary */
+  gap: 10px; /* Space between the cards */
+}

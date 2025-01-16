@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import Card from "../Card/Card";
+import "./GamePage.css";
 import { useParams } from "react-router-dom";
 
 const socket = io("http://localhost:5000");
@@ -31,6 +33,10 @@ const GamePage = () => {
     };
   }, [id]);
 
+  const handleCardClick = (card) => {
+    console.log("Card clicked:", card);
+  };
+
   return (
     <div>
       <h1>Game Page</h1>
@@ -55,28 +61,23 @@ const GamePage = () => {
       <div>
         <h2>Your Deck</h2>
         {gameData?.players?.map((player, playerIndex) => {
-          return (
-            <div key={player.userId || playerIndex}>
-              {cardsGameData?.hands[playerIndex]?.map((card, index) => (
-                <div key={index} style={{ marginBottom: "10px" }}>
-                  {socket.id === card.playerId ? (
-                    <p>
-                      <strong>Card {index + 1}:</strong> {card.value} of{" "}
-                      {card.suit}
-                      <br />
-                      <strong>Points:</strong> {card.points}
-                      <br />
-                      <strong>True Value:</strong> {card.trueValue}
-                      <br />
-                      <strong>Player ID:</strong> {card.playerId}
-                    </p>
-                  ) : (
-                    <p></p>
-                  )}
-                </div>
-              ))}
-            </div>
-          );
+          if (socket.id === player.socketId) {
+            return (
+              <div key={player.userId || playerIndex} className="player-cards">
+                {cardsGameData?.hands[playerIndex]?.map((card, index) => (
+                  <Card
+                    key={index}
+                    card={card}
+                    index={index}
+                    isYourCard={true}
+                    onClick={handleCardClick}
+                  />
+                ))}
+              </div>
+            );
+          } else {
+            return null;
+          }
         })}
       </div>
 
@@ -85,9 +86,21 @@ const GamePage = () => {
           return (
             <div key={player.userId || playerIndex}>
               {socket.id !== player.socketId ? (
-                <p>
+                <div
+                  key={player.userId || playerIndex}
+                  className="player-cards"
+                >
                   <strong>player {player.username}</strong>
-                </p>
+                  {cardsGameData?.hands[playerIndex]?.map((card, index) => (
+                    <Card
+                      key={index}
+                      card={card}
+                      index={index}
+                      isYourCard={false}
+                      onClick={handleCardClick}
+                    />
+                  ))}
+                </div>
               ) : (
                 <p></p>
               )}
@@ -96,20 +109,17 @@ const GamePage = () => {
         })}
       </div>
 
-      <div>
-        <h2>Remaining deck</h2>
+      <h2>Remaining deck</h2>
+      <div className="remaining-deck">
         {cardsGameData?.remainingDeck?.map((card, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
-            <p>
-              <strong>Card {index + 1}:</strong> {card.value} of {card.suit}
-              <br />
-              <strong>Points:</strong> {card.points}
-              <br />
-              <strong>True Value:</strong> {card.trueValue}
-              <br />
-              <strong>Player ID:</strong> {card.playerId}
-            </p>
-          </div>
+          <Card
+            key={index}
+            card={card}
+            index={index}
+            isYourCard={false}
+            onClick={handleCardClick}
+            className="card"
+          />
         ))}
       </div>
     </div>

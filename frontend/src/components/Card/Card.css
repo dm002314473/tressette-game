@@ -1,0 +1,34 @@
+.card {
+  border: 1px solid blcak;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  text-align: center;
+  width: 70px;
+  height: 90px;
+}
+
+.your-card {
+  background-color: #f9f9f9;
+  color: #05445e;
+}
+
+.opponent-card {
+  background-color: red;
+  color: #7d7d7d;
+}
+
+.hidden-card {
+  font-style: italic;
+  color: #a0a0a0;
+}
+
+.card p {
+  margin: 5px 0;
+}
+
+.card strong {
+  color: #333;
+}
