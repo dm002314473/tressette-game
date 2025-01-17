@@ -15,13 +15,13 @@ const GamePage = () => {
 
   const sendMessage = async () => {
     //novo nema currentMessage
-    await socket.emit("sendMessage", id);
+    //await socket.emit("sendMessage", id);
   };
 
   useEffect(() => {
     socket.emit("joinGame", id);
 
-    socket.on("receiveMessage", (cardsData, gameData) => {
+    socket.on("startGame", (cardsData, gameData) => {
       console.log("received: ", cardsData);
       console.log("socket.id: ", socket.id);
       setCardsGameData(cardsData);
@@ -29,13 +29,19 @@ const GamePage = () => {
     });
 
     return () => {
-      socket.off("receiveMessage");
+      socket.off("startGame");
     };
   }, [id]);
 
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
+    socket.emit("playMove", { card, gameId: id });
   };
+
+  socket.on("roundEnded", (updatedGameState) => {
+    setGameData(updatedGameState);
+    console.log("Round ended, new game state: ", updatedGameState);
+  });
 
   return (
     <div>

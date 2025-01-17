@@ -20,35 +20,76 @@ module.exports = (io) => {
       await initializeGames();
 
       socket.join(gameId);
-
       console.log(`player ${socket.id} joined game ${gameId}`);
-    });
 
-    socket.on("sendMessage", async (roomId) => {
-      console.log("roomId: ", roomId);
-
-      currentGame = await Game.findOne({ _id: roomId });
-      console.log("current game type: ", currentGame?.type);
-
-      const deck = new Deck();
-      gameDeck[roomId] = deck.deal(currentGame?.type); //deals 2 or 4 hands of cards based on game type(2/4 players)
-
-      //setting each card from hands id of player in which hands they are
-      const room = io.sockets.adapter.rooms.get(roomId);
+      const room = io.sockets.adapter.rooms.get(gameId);
       if (room) {
         const socketIds = Array.from(room);
-        console.log(`Sockets in room ${roomId}:`, socketIds);
-        for (let i = 0; i < socketIds.length; i++) {
-          currentGame.players[i].socketId = socketIds[i];
-          gameDeck[roomId]?.hands[i]?.forEach((element) => {
-            element.playerId = socketIds[i];
-          });
+        console.log(`Players in room ${gameId}:`, socketIds);
+
+        currentGame = await Game.findOne({ id: gameId.id });
+        if (!currentGame) {
+          console.error(`Game ${gameId} not found.`);
+          return;
         }
-      } else {
-        console.log(`Room ${roomId} does not exist or is empty.`);
+
+        currentGame.players = socketIds.map((socketId, index) => ({
+          userId: `user${index + 1}`,
+          socketId,
+        }));
+
+        if (socketIds.length.toString() === currentGame.type) {
+          console.log(`All players have joined. Starting game ${gameId}.`);
+
+          const deck = new Deck();
+          gameDeck[gameId] = deck.deal(currentGame.type);
+
+          for (let i = 0; i < socketIds.length; i++) {
+            gameDeck[gameId]?.hands[i]?.forEach((card) => {
+              card.playerId = socketIds[i];
+            });
+          }
+
+          io.to(gameId).emit("startGame", gameDeck[gameId], currentGame);
+        }
+      }
+    });
+
+    socket.on("playMove", async ({ card, gameId }) => {
+      const currentGame = await Game.findOne({ id: gameId.id });
+
+      console.log(currentGame);
+
+      console.log(currentGame.turn, socket.id);
+      if (currentGame.turn !== socket.id) {
+        console.log("Not your turn");
+        return;
       }
 
-      socket.to(roomId).emit("receiveMessage", gameDeck[roomId], currentGame);
+      console.log("WE PLAYED THE CARD");
+
+      playedCards.push({ playerId: socket.id, card });
+
+      // Check if all players have played
+      if (playedCards.length === currentGame.players.length) {
+        // Determine the round winner
+        const roundWinner = calculateRoundWinner(
+          playedCards,
+          currentGame.firstPlayer
+        );
+
+        // Update the game state with the winner
+        currentGame = updateGameState(currentGame, roundWinner);
+
+        // Clear played cards for the next round
+        currentGame.playedCards = [];
+
+        // Emit updated game state
+        io.to(gameId).emit("roundEnded", currentGame);
+      } else {
+        // Emit updated game state to all players, including the next player's turn
+        io.to(gameId).emit("gameUpdate", currentGame);
+      }
     });
 
     socket.on("disconnect", () => {
