@@ -16,12 +16,14 @@ module.exports = (io) => {
   io.on("connection", (socket) => {
     console.log("user connected: ", socket.id);
 
-    socket.on("joinGame", async (gameId) => {
+    socket.on("joinGame", async (gameId, userData) => {
       await initializeGames();
 
       socket.join(gameId);
 
-      console.log(`player ${socket.id} joined game ${gameId}`);
+      console.log(
+        `player ${userData.user} with id ${userData.id} joined game ${gameId}`
+      );
     });
 
     socket.on("sendMessage", async (roomId) => {
@@ -39,10 +41,13 @@ module.exports = (io) => {
         const socketIds = Array.from(room);
         console.log(`Sockets in room ${roomId}:`, socketIds);
         for (let i = 0; i < socketIds.length; i++) {
-          currentGame.players[i].socketId = socketIds[i];
-          gameDeck[roomId]?.hands[i]?.forEach((element) => {
-            element.playerId = socketIds[i];
-          });
+          if (currentGame && currentGame.players[i]) {
+            currentGame.players[i].socketId = socketIds[i];
+            gameDeck[roomId]?.hands[i]?.forEach((element) => {
+              element.playerId = currentGame.players[i]._id;
+            });
+            currentGame.players[i].hand = gameDeck[i].hands[i];
+          }
         }
       } else {
         console.log(`Room ${roomId} does not exist or is empty.`);
