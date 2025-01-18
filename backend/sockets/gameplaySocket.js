@@ -22,7 +22,7 @@ module.exports = (io) => {
       socket.join(gameId);
 
       console.log(
-        `player ${userData.user} with id ${userData.id} joined game ${gameId}`
+        `player ${userData?.user} with id ${userData?.id} joined game ${gameId}`
       );
     });
 
@@ -46,7 +46,7 @@ module.exports = (io) => {
             gameDeck[roomId]?.hands[i]?.forEach((element) => {
               element.playerId = currentGame.players[i]._id;
             });
-            currentGame.players[i].hand = gameDeck[i].hands[i];
+            currentGame.players[i].hand = gameDeck[i]?.hands[i];
           }
         }
       } else {
