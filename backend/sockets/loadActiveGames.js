@@ -9,7 +9,6 @@ const loadActiveGames = async () => {
       activeGames[game.gameId] = game;
     });
 
-    console.log("Active games loaded from DB:", activeGames);
     return activeGames;
   } catch (err) {
     console.error("Failed to load games:", err);

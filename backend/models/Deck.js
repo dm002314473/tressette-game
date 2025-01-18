@@ -6,8 +6,8 @@ class Deck {
   initializeDeck() {
     const suits = ["bastoni", "denari", "coppe", "spadi"];
     const values = ["1", "2", "3", "4", "5", "6", "7", "11", "12", "13"];
-    const points = [3, 1, 1, 0, 0, 0, 0, 1, 1, 1];
-    const trueValue = [8, 10, 9, 1, 2, 3, 4, 5, 6, 7];
+    const points = ["3", "1", "1", "0", "0", "0", "0", "1", "1", "1"];
+    const trueValue = ["8", "10", "9", "1", "2", "3", "4", "5", "6", "7"];
     const playerId = "remainingDeck";
 
     const deck = [];
@@ -37,9 +37,22 @@ class Deck {
     const cardsPerPlayer = 10;
     const hands = [];
     const playerCount = parseInt(numPlayers, 10);
+
     for (let i = 0; i < playerCount; i++) {
-      hands.push(this.cards.splice(0, cardsPerPlayer));
+      hands.push(
+        this.cards.splice(0, cardsPerPlayer).map((card) => ({
+          ...card,
+          playerId: null,
+        }))
+      );
     }
+
+    this.cards = this.cards.map((card) => ({
+      ...card,
+      playerId: "remainingDeck",
+    }));
+
+    console.log(hands[0][0]);
     return { hands, remainingDeck: this.cards };
   }
 }

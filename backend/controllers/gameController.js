@@ -145,13 +145,9 @@ const FetchPublicGames = async (req, res) => {
       isPrivate: false,
     }).sort(sortCriteria);
 
-    console.log(publicGames);
-
     const currentPublicGame = publicGames.find(
       (game) => game.status === "waiting"
     );
-
-    console.log("current public game: ", currentPublicGame);
 
     res.status(200).json(currentPublicGame);
   } catch (error) {

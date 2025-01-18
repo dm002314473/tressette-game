@@ -10,27 +10,23 @@ const socket = io("http://localhost:5000");
 
 const GamePage = () => {
   const { id } = useParams();
-  const { userData } = useUser();
-  console.log(`username: ${userData.user} userId: ${userData.id}`);
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [cardsGameData, setCardsGameData] = useState(null);
+  const { userData, setUserData } = useUser();
   const [gameData, setGameData] = useState(null);
-  const [playersInGame, setPlayersInGame] = useState(null);
 
-  const sendMessage = async () => {
-    //novo nema currentMessage
-    //await socket.emit("sendMessage", id);
-  };
+  useEffect(() => {
+    const storedUserData = JSON.parse(localStorage.getItem("userData"));
+    if (!userData && storedUserData) {
+      setUserData(storedUserData);
+    }
+  }, [userData, setUserData]);
 
   useEffect(() => {
     socket.emit("joinGame", id, userData);
 
-    socket.on("startGame", (cardsData, gameData) => {
-      console.log("received: ", cardsData);
+    socket.on("startGame", (gameData) => {
+      console.log("received: ", gameData);
       console.log("socket.id: ", socket.id);
-      setCardsGameData(cardsData);
       setGameData(gameData);
-      createPlayersInGameArray(gameData);
     });
 
     return () => {
@@ -39,7 +35,7 @@ const GamePage = () => {
   }, [id]);
 
   const handleCardClick = (card) => {
-    console.log("Card clicked:", card);
+    console.log("Card clicked:", card, id);
     socket.emit("playMove", { card, gameId: id });
   };
 
@@ -47,22 +43,9 @@ const GamePage = () => {
     setGameData(updatedGameState);
     console.log("Round ended, new game state: ", updatedGameState);
   });
-  const createPlayersInGameArray = (gameData) => {
-    let array = [];
-    if (gameData?.players) {
-      gameData.players.forEach((element) => {
-        array.push(element);
-      });
-    }
-    setPlayersInGame(array);
-    console.log("players in game: ", array);
-  };
 
   return (
     <div className="container">
-      <button class="btn btn-secondary btn-lg" onClick={sendMessage}>
-        send
-      </button>
       {/* Opponent's Cards for 2 players game*/}
       {gameData?.players?.length === 2 && (
         <div className="opponent-cards">
@@ -72,7 +55,7 @@ const GamePage = () => {
               <div key={player.userId || playerIndex} className="opponent">
                 <strong>{player.username}</strong>
                 <div className="opponent-hand">
-                  {cardsGameData?.hands[playerIndex]?.map((card, index) => (
+                  {gameData.players[playerIndex]?.hand?.map((card, index) => (
                     <Card
                       key={index}
                       card={card}
@@ -90,7 +73,7 @@ const GamePage = () => {
       <div className="middle-container">
         {/* Remaining Deck */}
         <div className="remaining-deck">
-          {cardsGameData?.remainingDeck?.map((card, index) => (
+          {gameData?.remainingDeck?.map((card, index) => (
             <Card key={index} card={card} index={index} isYourCard={false} />
           ))}
         </div>
@@ -106,7 +89,7 @@ const GamePage = () => {
         {gameData?.players?.length === 4 && (
           <>
             <div className="side-deck left">
-              {gameData.players[1]?.hand.map((card, index) => (
+              {gameData.players[0]?.hand.map((card, index) => (
                 <Card
                   key={index}
                   card={card}
@@ -133,7 +116,7 @@ const GamePage = () => {
       <div className="player-cards">
         {gameData?.players?.map((player, playerIndex) => {
           if (socket.id === player.socketId) {
-            return cardsGameData?.hands[playerIndex]?.map((card, index) => (
+            return gameData.players[playerIndex]?.hand?.map((card, index) => (
               <Card
                 key={index}
                 card={card}

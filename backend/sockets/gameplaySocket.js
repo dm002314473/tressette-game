@@ -20,37 +20,20 @@ module.exports = (io) => {
       await initializeGames();
 
       socket.join(gameId);
-
       console.log(
         `player ${userData.user} with id ${userData.id} joined game ${gameId}`
       );
-
-      const room = io.sockets.adapter.rooms.get(gameId);
-
-      console.log(`Players in room ${gameId}:`, socketIds);
 
       currentGame = await Game.findOne({ id: gameId.id });
       if (!currentGame) {
         console.error(`Game ${gameId} not found.`);
         return;
       }
+
+      const room = io.sockets.adapter.rooms.get(gameId);
       if (room) {
         const socketIds = Array.from(room);
-        console.log(`Sockets in room ${roomId}:`, socketIds);
-        for (let i = 0; i < socketIds.length; i++) {
-          if (currentGame && currentGame.players[i]) {
-            currentGame.players[i].socketId = socketIds[i];
-            gameDeck[roomId]?.hands[i]?.forEach((element) => {
-              element.playerId = currentGame.players[i]._id;
-            });
-            currentGame.players[i].hand = gameDeck[i].hands[i];
-          }
-        }
-
-        currentGame.players = socketIds.map((socketId, index) => ({
-          userId: `user${index + 1}`,
-          socketId,
-        }));
+        console.log(`Players/Sockets in room ${gameId}:`, socketIds);
 
         if (socketIds.length.toString() === currentGame.type) {
           console.log(`All players have joined. Starting game ${gameId}.`);
@@ -58,13 +41,49 @@ module.exports = (io) => {
           const deck = new Deck();
           gameDeck[gameId] = deck.deal(currentGame.type);
 
-          for (let i = 0; i < socketIds.length; i++) {
-            gameDeck[gameId]?.hands[i]?.forEach((card) => {
-              card.playerId = socketIds[i];
-            });
-          }
+          console.log(gameDeck[gameId].hands[0][0]);
 
-          io.to(gameId).emit("startGame", gameDeck[gameId], currentGame);
+          const randomIndex = Math.floor(Math.random() * socketIds.length);
+          currentGame.turn = socketIds[randomIndex];
+
+          currentGame.remainingDeck = gameDeck[gameId].remainingDeck;
+
+          for (let i = 0; i < socketIds.length; i++) {
+            if (!currentGame.players[i]) {
+              console.warn(`Player ${i} does not exist in game ${gameId}`);
+              continue;
+            }
+
+            currentGame.players[i].socketId = socketIds[i];
+
+            if (gameDeck[gameId] && gameDeck[gameId].hands[i]) {
+              console.log("KARTA PRIJE MAP: ", gameDeck[gameId].hands[i][0]);
+              currentGame.players[i].hand = gameDeck[gameId].hands[i].map(
+                (card) => ({
+                  ...card,
+                  playerId: currentGame.players[i].socketId,
+                })
+              );
+              console.log("KARTA NAKON MAP: ", currentGame.players[i].hand[0]);
+            } else {
+              console.error(
+                `Hand data missing for player ${i} in game ${gameId}`
+              );
+            }
+          }
+        }
+
+        try {
+          await Game.findByIdAndUpdate(gameId, currentGame, {
+            new: true,
+          });
+          console.log(`Game ${gameId} updated successfully.`);
+        } catch (error) {
+          console.error(`Failed to update game ${gameId}:`, error);
+        }
+
+        if (socketIds.length.toString() === currentGame.type) {
+          io.to(gameId).emit("startGame", currentGame);
         }
       }
     });
@@ -72,10 +91,8 @@ module.exports = (io) => {
     socket.on("playMove", async ({ card, gameId }) => {
       const currentGame = await Game.findOne({ id: gameId.id });
 
-      console.log(currentGame);
-
-      console.log(currentGame.turn, socket.id);
-      if (currentGame.turn !== socket.id) {
+      console.log(currentGame.turn, card.playerId);
+      if (currentGame.turn !== card.playerId) {
         console.log("Not your turn");
         return;
       }

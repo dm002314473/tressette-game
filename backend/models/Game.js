@@ -19,10 +19,11 @@ const gameSchema = new mongoose.Schema({
       socketId: { type: String, required: false },
       hand: [
         {
-          suits: { type: String, required: false },
-          values: { type: String, required: false },
+          suit: { type: String, required: false },
+          value: { type: String, required: false },
           points: { type: String, required: false },
           trueValue: { type: String, required: false },
+          playerId: { type: String, required: false },
         },
       ],
     },
@@ -37,7 +38,16 @@ const gameSchema = new mongoose.Schema({
   joinCode: { type: String },
   createdAt: { type: Date, default: Date.now },
   boardState: { type: Object, default: null },
-  turn: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  turn: { type: String, required: false },
+  remainingDeck: [
+    {
+      suit: { type: String, required: true },
+      value: { type: String, required: true },
+      points: { type: String, required: true },
+      trueValue: { type: String, required: true },
+      playerId: { type: String, required: false },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Game", gameSchema);
