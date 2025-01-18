@@ -16,21 +16,35 @@ module.exports = (io) => {
   io.on("connection", (socket) => {
     console.log("user connected: ", socket.id);
 
-    socket.on("joinGame", async (gameId) => {
+    socket.on("joinGame", async (gameId, userData) => {
       await initializeGames();
 
       socket.join(gameId);
-      console.log(`player ${socket.id} joined game ${gameId}`);
+
+      console.log(
+        `player ${userData.user} with id ${userData.id} joined game ${gameId}`
+      );
 
       const room = io.sockets.adapter.rooms.get(gameId);
+
+      console.log(`Players in room ${gameId}:`, socketIds);
+
+      currentGame = await Game.findOne({ id: gameId.id });
+      if (!currentGame) {
+        console.error(`Game ${gameId} not found.`);
+        return;
+      }
       if (room) {
         const socketIds = Array.from(room);
-        console.log(`Players in room ${gameId}:`, socketIds);
-
-        currentGame = await Game.findOne({ id: gameId.id });
-        if (!currentGame) {
-          console.error(`Game ${gameId} not found.`);
-          return;
+        console.log(`Sockets in room ${roomId}:`, socketIds);
+        for (let i = 0; i < socketIds.length; i++) {
+          if (currentGame && currentGame.players[i]) {
+            currentGame.players[i].socketId = socketIds[i];
+            gameDeck[roomId]?.hands[i]?.forEach((element) => {
+              element.playerId = currentGame.players[i]._id;
+            });
+            currentGame.players[i].hand = gameDeck[i].hands[i];
+          }
         }
 
         currentGame.players = socketIds.map((socketId, index) => ({

@@ -1,10 +1,20 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./Card.css";
 
 const Card = ({ card, index, isYourCard, onClick }) => {
   return (
     <div
-      className={`card ${isYourCard ? "your-card" : "opponent-card"}`}
+      className={`card shadow-sm text-center ${
+        isYourCard ? "your-card" : "opponent-card"
+      }`}
+      style={{
+        width: "90px",
+        height: "120px",
+        margin: "10px",
+        padding: "10px",
+        borderRadius: "8px",
+      }}
       onClick={() => onClick && onClick(card)}
       role="button"
       tabIndex={0}
@@ -12,12 +22,12 @@ const Card = ({ card, index, isYourCard, onClick }) => {
     >
       {isYourCard ? (
         <>
-          <p>
+          <p className="mb-1">
             {card.value} of {card.suit}
           </p>
         </>
       ) : (
-        <p className="hidden-card"></p>
+        <p className="font-italic text-muted mb-1"></p>
       )}
     </div>
   );
