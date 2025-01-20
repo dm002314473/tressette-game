@@ -21,7 +21,7 @@ module.exports = (io) => {
 
       socket.join(gameId);
       console.log(
-        `player ${userData.user} with id ${userData.id} joined game ${gameId}`
+        `player ${userData?.user} with id ${userData?.id} joined game ${gameId}`
       );
 
       currentGame = await Game.findOne({ id: gameId.id });
@@ -98,29 +98,6 @@ module.exports = (io) => {
       }
 
       console.log("WE PLAYED THE CARD");
-
-      playedCards.push({ playerId: socket.id, card });
-
-      // Check if all players have played
-      if (playedCards.length === currentGame.players.length) {
-        // Determine the round winner
-        const roundWinner = calculateRoundWinner(
-          playedCards,
-          currentGame.firstPlayer
-        );
-
-        // Update the game state with the winner
-        currentGame = updateGameState(currentGame, roundWinner);
-
-        // Clear played cards for the next round
-        currentGame.playedCards = [];
-
-        // Emit updated game state
-        io.to(gameId).emit("roundEnded", currentGame);
-      } else {
-        // Emit updated game state to all players, including the next player's turn
-        io.to(gameId).emit("gameUpdate", currentGame);
-      }
     });
 
     socket.on("disconnect", () => {
