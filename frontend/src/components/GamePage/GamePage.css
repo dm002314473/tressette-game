@@ -68,6 +68,14 @@ body {
   overflow-x: auto; /* Allow horizontal scrolling if cards exceed available space */
   padding: 10px;
   white-space: nowrap; /* Prevent cards from wrapping to the next line */
+  border: 2px dashed #fff;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-height: 100px;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Opponent cards at the top */
@@ -79,6 +87,14 @@ body {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
+  border: 2px dashed #fff;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-height: 100px;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
 }
 
 .opponent {
@@ -106,12 +122,28 @@ body {
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
+  border: 2px dashed #fff;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-height: 300px;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
 }
 
 .side-deck.right {
   top: 50%;
   right: 20px;
   transform: translateY(-50%);
+  border: 2px dashed #fff;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-height: 300px;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Card Styling */
