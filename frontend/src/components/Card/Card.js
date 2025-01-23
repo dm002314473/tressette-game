@@ -8,13 +8,6 @@ const Card = ({ card, index, isYourCard, onClick }) => {
       className={`card shadow-sm text-center ${
         isYourCard ? "your-card" : "opponent-card"
       }`}
-      style={{
-        width: "90px",
-        height: "120px",
-        margin: "10px",
-        padding: "10px",
-        borderRadius: "8px",
-      }}
       onClick={() => onClick && onClick(card)}
       role="button"
       tabIndex={0}

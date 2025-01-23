@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
-import Card from "../Card/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./GamePage.css";
 import { useUser } from "../globalUsername/userContext";
@@ -53,27 +52,19 @@ const GamePage = () => {
   return (
     <div className="container">
       {/* Opponent's Cards for 2 players*/}
-      {gameData?.players?.length === 2 && (
-        <OpponentCards players={gameData.players} socket={socket} />
-      )}
+      {gameData?.type === "2" && <TopDeck />}
 
       {/* Middle Area */}
       <div className="middle-container">
         <RemainingDeck remainingDeck={gameData?.remainingDeck} />
-
         <TableDeck tableCards={gameData?.boardState} />
-
-        {/* player's Cards for 4 players*/}
-        {gameData?.players?.length === 4 &&
-          gameData.players[1] &&
-          gameData.players[2] &&
-          gameData.players[3] && (
-            <>
-              <TopDeck playerHand={gameData.players[1]} />
-              <SideDeck playerHand={gameData.players[2]} position="left" />
-              <SideDeck playerHand={gameData.players[3]} position="right" />
-            </>
-          )}
+        {gameData?.type === "4" && (
+          <>
+            <TopDeck />
+            <SideDeck position="left" />
+            <SideDeck position="right" />
+          </>
+        )}
       </div>
 
       {/* Player's Cards */}

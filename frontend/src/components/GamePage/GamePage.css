@@ -9,10 +9,12 @@ body {
 
 /* Container for the entire game */
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
+  width: 100vh;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -23,23 +25,33 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: calc(100vh - 200px); /* Reserve space for top and bottom areas */
   position: relative;
 }
 
 /* Cards thrown to the table */
 .table-cards {
+  position: relative;
+  top: 10%;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  border: 2px dashed #fff;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  min-height: 100px;
-  width: 300px;
+  min-height: 60%;
+  width: 100%;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(
+    45deg,
+    #c19a6b 20%,
+    #e2b97f 40%,
+    #8b5e3c 80%,
+    #c19a6b 100%
+  );
+  background-size: 200% 200%;
+  z-index: -1;
 }
 
 /* Remaining deck position */
@@ -49,18 +61,21 @@ body {
   left: 70px;
   width: 70px;
   height: 90px;
+  width: 100px; /* Adjust width to give a wider background */
+  height: 140px; /* Set a height to simulate the card space */
 }
 
 .remaining-deck .card {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
   z-index: 1;
 }
 
 /* Bottom Player Cards */
 .player-cards {
+  position: relative;
+  bottom: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -68,40 +83,29 @@ body {
   overflow-x: auto; /* Allow horizontal scrolling if cards exceed available space */
   padding: 10px;
   white-space: nowrap; /* Prevent cards from wrapping to the next line */
-  border: 2px dashed #fff;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  min-height: 100px;
-  width: 300px;
-  justify-content: center;
-  align-items: center;
+  width: 100%; /* Adjust width to give a wider background */
+  height: 140px; /* Set a height to simulate the card space */
 }
 
-/* Opponent cards at the top */
 .opponent-cards {
   display: flex;
   justify-content: center;
   gap: 10px;
+  width: 100%; /* Take full width of the container */
   position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 2px dashed #fff;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  min-height: 100px;
-  width: 300px;
-  justify-content: center;
-  align-items: center;
+  top: 5%; /* Adjust to match the layout */
+  transform: translateX(0); /* Center without needing transform */
 }
 
 .opponent {
+  position: absolute;
+  top: 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 10px;
+  width: 80%; /* Adjust width to give a wider background */
+  height: 140px; /* Set a height to simulate the card space */
 }
 
 .opponent-hand {
@@ -116,39 +120,26 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  width: 20%; /* Adjust for card width */
+  height: 100%; /* Adjust for card height */
 }
 
+/* Left Side Deck */
 .side-deck.left {
-  top: 50%;
-  left: 20px;
-  transform: translateY(-50%);
-  border: 2px dashed #fff;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  min-height: 300px;
-  width: 100px;
-  justify-content: center;
-  align-items: center;
+  top: 60%; /* Vertically centered */
+  left: -40%; /* Stick to the left edge */
+  transform: translate(0, -50%);
 }
 
+/* Right Side Deck */
 .side-deck.right {
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-  border: 2px dashed #fff;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  min-height: 300px;
-  width: 100px;
-  justify-content: center;
-  align-items: center;
+  top: 60%; /* Vertically centered */
+  right: -40%; /* Stick to the right edge */
+  transform: translate(0, -50%);
 }
 
-/* Card Styling */
 .card {
-  width: 90px;
+  width: 80px; /* Adjust for smaller sizes */
   height: 120px;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -157,6 +148,12 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 13px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.side-deck.left .card,
+.side-deck.right .card {
+  width: 120px;
+  height: 80px;
 }
