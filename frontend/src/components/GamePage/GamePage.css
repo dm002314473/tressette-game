@@ -87,6 +87,13 @@ body {
   height: 140px; /* Set a height to simulate the card space */
 }
 
+.card-image {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
 .opponent-cards {
   display: flex;
   justify-content: center;

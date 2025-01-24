@@ -3,6 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./Card.css";
 
 const Card = ({ card, index, isYourCard, onClick }) => {
+  const imagePath = `/CardImages/${card?.value}_${card?.suit}.png`;
+  console.log("image path: ", imagePath);
+
   return (
     <div
       className={`card shadow-sm text-center ${
@@ -15,9 +18,7 @@ const Card = ({ card, index, isYourCard, onClick }) => {
     >
       {isYourCard ? (
         <>
-          <p className="mb-1">
-            {card.value} of {card.suit}
-          </p>
+          <img src={imagePath} className="card-image" />
         </>
       ) : (
         <p className="font-italic text-muted mb-1"></p>
