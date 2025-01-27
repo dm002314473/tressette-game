@@ -9,7 +9,7 @@ const SideDeck = ({ position }) => {
   return (
     <div className={`side-deck ${position}`}>
       {cards.map((_, index) => (
-        <Card key={index} isYourCard={false} />
+        <Card key={index} isYourCard={"false"} />
       ))}
     </div>
   );

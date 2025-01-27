@@ -12,7 +12,7 @@ const PlayerCards = ({ players, socket, handleCardClick }) => {
               key={index}
               card={card}
               index={index}
-              isYourCard={true}
+              isYourCard={"true"}
               onClick={handleCardClick}
             />
           ));

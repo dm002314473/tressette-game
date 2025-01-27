@@ -6,7 +6,7 @@ const TableDeck = ({ tableCards }) => {
   return (
     <div className="table-cards">
       {tableCards?.map((card, index) => (
-        <Card key={index} card={card} index={index} isYourCard={false} />
+        <Card key={index} card={card} index={index} isYourCard={"onTable"} />
       ))}
     </div>
   );

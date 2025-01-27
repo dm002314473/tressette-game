@@ -6,7 +6,7 @@ const RemainingDeck = ({ remainingDeck }) => {
   return (
     <div className="remaining-deck">
       {remainingDeck?.map((card, index) => (
-        <Card key={index} card={card} index={index} isYourCard={false} />
+        <Card key={index} card={card} index={index} isYourCard={"tableDeck"} />
       ))}
     </div>
   );

@@ -8,7 +8,7 @@ const TopDeck = () => {
   return (
     <div className="opponent-cards">
       {cards.map((_, index) => (
-        <Card key={index} isYourCard={false} />
+        <Card key={index} isYourCard={"false"} />
       ))}
     </div>
   );

@@ -63,6 +63,7 @@ body {
   height: 90px;
   width: 100px; /* Adjust width to give a wider background */
   height: 140px; /* Set a height to simulate the card space */
+  pointer-events: none;
 }
 
 .remaining-deck .card {
@@ -74,17 +75,16 @@ body {
 
 /* Bottom Player Cards */
 .player-cards {
-  position: relative;
+  position: absolute;
   bottom: 5%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 10px; /* Space between cards */
-  overflow-x: auto; /* Allow horizontal scrolling if cards exceed available space */
+  align-items: flex-end;
+  overflow: hidden; /* Allow horizontal scrolling if cards exceed available space */
   padding: 10px;
-  white-space: nowrap; /* Prevent cards from wrapping to the next line */
-  width: 100%; /* Adjust width to give a wider background */
-  height: 140px; /* Set a height to simulate the card space */
+  width: 100vh; /* Adjust width to give a wider background */
+  height: 300px; /* Set a height to simulate the card space */
+  overflow: visible;
 }
 
 .card-image {
@@ -97,7 +97,6 @@ body {
 .opponent-cards {
   display: flex;
   justify-content: center;
-  gap: 10px;
   width: 100%; /* Take full width of the container */
   position: absolute;
   top: 5%; /* Adjust to match the layout */
@@ -126,28 +125,25 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  width: 20%; /* Adjust for card width */
+  width: 30%; /* Adjust for card width */
   height: 100%; /* Adjust for card height */
 }
 
 /* Left Side Deck */
 .side-deck.left {
-  top: 60%; /* Vertically centered */
+  top: 70%; /* Vertically centered */
   left: -40%; /* Stick to the left edge */
   transform: translate(0, -50%);
 }
 
 /* Right Side Deck */
 .side-deck.right {
-  top: 60%; /* Vertically centered */
+  top: 70%; /* Vertically centered */
   right: -40%; /* Stick to the right edge */
   transform: translate(0, -50%);
 }
 
 .card {
-  width: 80px; /* Adjust for smaller sizes */
-  height: 120px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -157,10 +153,52 @@ body {
   font-weight: bold;
   font-size: 13px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform-origin: bottom center; /* Rotate from the bottom */
+  transition: transform 0.2s ease, z-index 0.2s ease;
+}
+
+.card.your-card:nth-child(1) {
+  transform: rotate(-15deg);
+}
+.card.your-card:nth-child(2) {
+  transform: rotate(-12deg);
+}
+.card.your-card:nth-child(3) {
+  transform: rotate(-9deg);
+}
+.card.your-card:nth-child(4) {
+  transform: rotate(-6deg);
+}
+.card.your-card:nth-child(5) {
+  transform: rotate(-3deg);
+}
+.card.your-card:nth-child(6) {
+  transform: rotate(0deg);
+}
+.card.your-card:nth-child(7) {
+  transform: rotate(3deg);
+}
+.card.your-card:nth-child(8) {
+  transform: rotate(6deg);
+}
+.card.your-card:nth-child(9) {
+  transform: rotate(9deg);
+}
+.card.your-card:nth-child(10) {
+  transform: rotate(12deg);
+}
+
+.card.your-card:hover {
+  transform: scale(1.2) translateY(-10px) rotate(0deg);
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .side-deck.left .card,
 .side-deck.right .card {
   width: 120px;
   height: 80px;
+  position: relative;
+  margin-top: -20px; /* Adjust for overlap */
+  z-index: 1; /* Ensure cards layer on top of each other */
 }
