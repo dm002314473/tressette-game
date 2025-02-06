@@ -1,6 +1,11 @@
 const loadActiveGames = require("./loadActiveGames");
 const Deck = require("../models/Deck");
 const Game = require("../models/Game");
+const {
+  playBySuit,
+  changeIdOfPlayersTurn,
+  updateTurnInDataBase,
+} = require("../utils/gameRules");
 
 let activeGames = {};
 
@@ -97,7 +102,28 @@ module.exports = (io) => {
         return;
       }
 
-      console.log("WE PLAYED THE CARD");
+      let changeTurn = false;
+
+      const currentPlayerTurn = currentGame.players.find(
+        (player) => player.socketId === currentGame.turn
+      );
+
+      if (currentPlayerTurn) {
+        if (playBySuit(currentPlayerTurn.hand, card, currentGame.boardState)) {
+          console.log("card is played");
+          io.to(currentGame.id).emit("movePlayed", card);
+
+          currentGame.turn = changeIdOfPlayersTurn(
+            currentGame.turn,
+            currentGame.players
+          );
+          changeTurn = true;
+        }
+      }
+
+      if (changeTurn) {
+        updateTurnInDataBase(currentGame);
+      }
     });
 
     socket.on("disconnect", () => {

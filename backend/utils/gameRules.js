@@ -1,14 +1,52 @@
-const playBySuit = (playerHand, playedCards) => {
-  const suitPlayed = playedCards.length > 0 ? playedCards[0].suit : null;
+const isSelectedCardOfSameSuit = (hand, card) => {
+  let flag = false;
+  hand.forEach((cardInHand) => {
+    if (cardInHand.suit === card.suit && cardInHand.value === card.value) {
+      flag = true;
+    }
+  });
+  return flag;
+};
+
+const playBySuit = (playerHand, selectedCard, tableCards) => {
+  const suitPlayed = tableCards?.length > 0 ? tableCards[0].suit : null;
   if (suitPlayed) {
     const validCards = playerHand.filter((card) => card.suit === suitPlayed);
-    if (validCards.length > 0) {
-      return validCards;
+
+    if (
+      validCards.length > 0 &&
+      isSelectedCardOfSameSuit(validCards, selectedCard)
+    ) {
+      return selectedCard;
     } else {
-      return playerHand;
+      return null;
     }
   } else {
-    return playerHand;
+    return selectedCard;
+  }
+};
+
+const changeIdOfPlayersTurn = (currentPlayerTurnId, allPlayers) => {
+  let allPlayersId = [];
+  allPlayers.forEach((player) => {
+    allPlayersId.push(player.socketId);
+  });
+
+  let currentPlayerIndex = allPlayersId.indexOf(currentPlayerTurnId);
+  if (currentPlayerIndex === allPlayersId.length - 1) {
+    currentPlayerIndex = 0;
+  } else {
+    currentPlayerIndex += 1;
+  }
+  return allPlayersId[currentPlayerIndex];
+};
+
+const updateTurnInDataBase = async (currentGame) => {
+  console.log("turn: ", currentGame.turn);
+  try {
+    await currentGame.save();
+  } catch (error) {
+    console.error("Error updating turn:", error);
   }
 };
 
@@ -34,4 +72,6 @@ module.exports = {
   playBySuit,
   calculateRoundWinner,
   updateGameState,
+  changeIdOfPlayersTurn,
+  updateTurnInDataBase,
 };

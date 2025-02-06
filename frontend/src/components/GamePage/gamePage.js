@@ -49,6 +49,12 @@ const GamePage = () => {
     console.log("Round ended, new game state: ", updatedGameState);
   });
 
+  socket.on("movePlayed", (cardPlayed) => {
+    console.log(cardPlayed);
+    // removeCardFromPlayer(card, playerId);
+    // addCardToTable(card);
+  });
+
   return (
     <div className="container">
       {/* Opponent's Cards for 2 players*/}
