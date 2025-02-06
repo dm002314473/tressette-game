@@ -37,7 +37,15 @@ const gameSchema = new mongoose.Schema({
   isPrivate: { type: Boolean, default: false },
   joinCode: { type: String },
   createdAt: { type: Date, default: Date.now },
-  boardState: { type: Object, default: null },
+  boardState: [
+    {
+      suit: { type: String, required: true },
+      value: { type: String, required: true },
+      points: { type: String, required: true },
+      trueValue: { type: String, required: true },
+      playerId: { type: String, required: false },
+    },
+  ],
   turn: { type: String, required: false },
   remainingDeck: [
     {

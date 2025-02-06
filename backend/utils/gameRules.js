@@ -17,11 +17,17 @@ const playBySuit = (playerHand, selectedCard, tableCards) => {
       validCards.length > 0 &&
       isSelectedCardOfSameSuit(validCards, selectedCard)
     ) {
+      console.log("selected card is of correct suit");
+      return selectedCard;
+    } else if (validCards.length == 0) {
+      console.log("suit doesnt matter since player have non of given suit");
       return selectedCard;
     } else {
+      console.log("select card of correct suit");
       return null;
     }
   } else {
+    console.log("table is empty, suit doesnt matter");
     return selectedCard;
   }
 };
@@ -50,16 +56,22 @@ const updateTurnInDataBase = async (currentGame) => {
   }
 };
 
-const calculateRoundWinner = (playedCards, firstPlayer) => {
-  const winningCard = playedCards.reduce((winner, card) => {
-    if (card.value > winner.value) {
-      return card;
-    }
-    return winner;
-  }, playedCards[0]);
+const calculateRoundWinner = (playedCards) => {
+  const validCards = playedCards.filter(
+    (card) => card.suit === playedCards[0].suit
+  );
 
-  const winner = playedCards.find((card) => card === winningCard).playerId;
-  return winner;
+  if (validCards.length == 0) {
+    return playedCards[0].playerId;
+  } else {
+    let highestCard = validCards[0];
+    validCards.forEach((card) => {
+      if (card.trueValue > highestCard.trueValue) {
+        highestCard = card;
+      }
+    });
+    return highestCard.playerId;
+  }
 };
 
 const updateGameState = (gameState, roundWinner) => {

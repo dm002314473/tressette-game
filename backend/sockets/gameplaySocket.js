@@ -5,6 +5,7 @@ const {
   playBySuit,
   changeIdOfPlayersTurn,
   updateTurnInDataBase,
+  calculateRoundWinner,
 } = require("../utils/gameRules");
 
 let activeGames = {};
@@ -14,7 +15,6 @@ const initializeGames = async () => {
 };
 
 module.exports = (io) => {
-  //novo
   const gameDeck = {};
   let currentGame = {};
 
@@ -102,8 +102,6 @@ module.exports = (io) => {
         return;
       }
 
-      let changeTurn = false;
-
       const currentPlayerTurn = currentGame.players.find(
         (player) => player.socketId === currentGame.turn
       );
@@ -117,12 +115,16 @@ module.exports = (io) => {
             currentGame.turn,
             currentGame.players
           );
-          changeTurn = true;
-        }
-      }
 
-      if (changeTurn) {
-        updateTurnInDataBase(currentGame);
+          currentGame.boardState.push(card);
+
+          if (currentGame.boardState.length == currentGame.players.length) {
+            currentGame.turn = calculateRoundWinner(currentGame.boardState);
+            currentGame.boardState = [];
+          }
+
+          updateTurnInDataBase(currentGame);
+        }
       }
     });
 
