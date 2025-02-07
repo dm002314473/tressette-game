@@ -37,7 +37,7 @@ function MyStatsPage() {
         console.log("Username:", userData.user);
 
         const response = await fetch(
-          `http://localhost:5000/api/leaderboard/stats/my-stats/${userData.user}`,
+          `${process.env.REACT_APP_BACKEND}api/leaderboard/stats/my-stats/${userData.user}`,
           {
             method: "GET",
             headers: {

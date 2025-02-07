@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import "./JoinGame.css";
 import { useUser } from "../globalUsername/userContext";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect(`${process.env.REACT_APP_BACKEND}`);
 
 function JoinGame() {
   const { userData } = useUser();
@@ -26,7 +26,7 @@ function JoinGame() {
       const fetchPublicGames = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/games/public/${playerCount}`
+            `${process.env.REACT_APP_BACKEND}api/games/public/${playerCount}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch public games");
@@ -53,14 +53,17 @@ function JoinGame() {
         console.log("user id: ", userData.id);
         console.log("gameList: ", gameList);
         if (gameList) {
-          const response = await fetch(`http://localhost:5000/api/games/join`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              gameId: gameList._id,
-              userId: userData.id,
-            }),
-          });
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND}api/games/join`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                gameId: gameList._id,
+                userId: userData.id,
+              }),
+            }
+          );
           if (!response.ok) {
             throw new Error("Failed to join public game");
           }
@@ -79,7 +82,7 @@ function JoinGame() {
         // API GET: http://localhost:5000/api/games/join-by-code
         console.log({ gameCode: joinCode, userId: userData.id });
         const response = await fetch(
-          `http://localhost:5000/api/games/join-by-code`,
+          `${process.env.REACT_APP_BACKEND}api/games/join-by-code`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

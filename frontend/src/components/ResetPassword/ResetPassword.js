@@ -9,7 +9,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/reset-password/${email}`,
+        `${process.env.REACT_APP_BACKEND}api/reset-password/${email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

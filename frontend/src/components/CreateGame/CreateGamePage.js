@@ -5,7 +5,7 @@ import io from "socket.io-client";
 import "./CreateGamePage.css";
 import { useUser } from "../globalUsername/userContext";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect(`${process.env.REACT_APP_BACKEND}`);
 
 function CreateGamePage() {
   const { userData } = useUser();
@@ -39,7 +39,7 @@ function CreateGamePage() {
       const userId = userData.id;
 
       const response = await axios.post(
-        "http://localhost:5000/api/games/create",
+        `${process.env.REACT_APP_BACKEND}api/games/create`,
         {
           userId,
           type: playerCount === 2 ? "2" : "4",

@@ -11,7 +11,7 @@ import SideDeck from "./SideDecks";
 import TableDeck from "./TableDeck";
 import TopDeck from "./TopDeck";
 
-const socket = io("http://localhost:5000");
+const socket = io(`${process.env.REACT_APP_BACKEND}`);
 
 const GamePage = () => {
   const { id } = useParams();

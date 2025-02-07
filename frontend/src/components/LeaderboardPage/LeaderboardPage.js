@@ -33,7 +33,7 @@ function LeaderboardPage() {
       setError("");
       try {
         const response = await fetch(
-          `http://localhost:5000/api/leaderboard/stats/leaderboard?sortBy=${sortBy}&sortOrder=${sortOrder}`
+          `${process.env.REACT_APP_BACKEND}api/leaderboard/stats/leaderboard?sortBy=${sortBy}&sortOrder=${sortOrder}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch leaderboard data");

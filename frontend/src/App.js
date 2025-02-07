@@ -17,7 +17,7 @@ import EnterNewPasswordPage from "./components/ResetPassword/EnterNewPasswordPag
 function App() {
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/hello")
+      .get(`${process.env.REACT_APP_BACKEND}api/hello`)
       .catch((error) => console.error("There was an error!", error));
   }, []);
 
