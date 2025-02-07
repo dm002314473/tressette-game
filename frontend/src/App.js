@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login/LoginPage";
 import RegistrationPage from "./components/Login/RegistrationPage";
 import MainMenuPage from "./components/MainMenu/MainMenuPage";
@@ -13,6 +13,8 @@ import MyStatsPage from "./components/LeaderboardPage/MyStatsPage";
 import GamePage from "./components/GamePage/gamePage";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import EnterNewPasswordPage from "./components/ResetPassword/EnterNewPasswordPage";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import { useUser } from "./components/globalUsername/userContext";
 
 function App() {
   useEffect(() => {
@@ -26,16 +28,24 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/main-menu" element={<MainMenuPage />} />
-        <Route path="/create-game" element={<CreateGame />} />
-        <Route path="/join-game" element={<JoinGame />} />
-        <Route path="/rules" element={<RulesPage />} />
-        <Route path="/stats" element={<StatsPage />} />
-        <Route path="/stats/leaderboard" element={<LeaderboardPage />} />
-        <Route path="/stats/my-stats" element={<MyStatsPage />} />
-        <Route path="/game/:id" element={<GamePage />} />
         <Route path="/reset-password/enter-mail" element={<ResetPassword />} />
         <Route path="/reset-password" element={<EnterNewPasswordPage />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/main-menu" element={<MainMenuPage />} />
+          <Route path="/create-game" element={<CreateGame />} />
+          <Route path="/join-game" element={<JoinGame />} />
+          <Route path="/rules" element={<RulesPage />} />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/stats/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/stats/my-stats" element={<MyStatsPage />} />
+          <Route path="/game/:id" element={<GamePage />} />
+        </Route>
+
+        <Route
+          path="*"
+          element={<Navigate to={useUser() ? "/main-menu" : "/"} />}
+        />
       </Routes>
     </div>
   );
