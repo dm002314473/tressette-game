@@ -4,8 +4,9 @@ const Game = require("../models/Game");
 const {
   playBySuit,
   changeIdOfPlayersTurn,
-  updateTurnInDataBase,
+  updateDataBase,
   calculateRoundWinner,
+  removeCardFromPlayer,
 } = require("../utils/gameRules");
 
 let activeGames = {};
@@ -116,6 +117,10 @@ module.exports = (io) => {
             currentGame.players
           );
 
+          currentPlayerTurn.hand = removeCardFromPlayer(
+            currentPlayerTurn,
+            card
+          );
           currentGame.boardState.push(card);
 
           if (currentGame.boardState.length == currentGame.players.length) {
@@ -123,7 +128,7 @@ module.exports = (io) => {
             currentGame.boardState = [];
           }
 
-          updateTurnInDataBase(currentGame);
+          updateDataBase(currentGame);
         }
       }
     });

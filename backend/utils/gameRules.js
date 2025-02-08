@@ -47,7 +47,7 @@ const changeIdOfPlayersTurn = (currentPlayerTurnId, allPlayers) => {
   return allPlayersId[currentPlayerIndex];
 };
 
-const updateTurnInDataBase = async (currentGame) => {
+const updateDataBase = async (currentGame) => {
   console.log("turn: ", currentGame.turn);
   try {
     await currentGame.save();
@@ -74,6 +74,18 @@ const calculateRoundWinner = (playedCards) => {
   }
 };
 
+const removeCardFromPlayer = (player, selectedCard) => {
+  console.log("Selected: ", selectedCard._id.toString());
+
+  let updatedHand = player.hand.filter((card) => {
+    console.log("Card: ", card._id.toString());
+    return card._id.toString() !== selectedCard._id.toString();
+  });
+
+  console.log("Updated deck: ", updatedHand);
+  return updatedHand;
+};
+
 const updateGameState = (gameState, roundWinner) => {
   gameState.points[roundWinner]++;
   gameState.turn = (gameState.turn + 1) % gameState.players.length;
@@ -85,5 +97,6 @@ module.exports = {
   calculateRoundWinner,
   updateGameState,
   changeIdOfPlayersTurn,
-  updateTurnInDataBase,
+  updateDataBase,
+  removeCardFromPlayer,
 };
