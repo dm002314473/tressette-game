@@ -1,9 +1,8 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useUser } from "../components/globalUsername/userContext";
 
 const ProtectedRoute = () => {
-  const { userData } = useUser();
+  const userData = JSON.parse(localStorage.getItem("userData"));
   return userData ? <Outlet /> : <Navigate to="/" />;
 };
 

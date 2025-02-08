@@ -9,6 +9,7 @@ const socket = io.connect(`${process.env.REACT_APP_BACKEND}`);
 
 function CreateGamePage() {
   const { userData } = useUser();
+  console.log("USERDATA: ", userData);
 
   const [playerCount, setPlayerCount] = useState(null);
   const [gameType, setGameType] = useState(null);

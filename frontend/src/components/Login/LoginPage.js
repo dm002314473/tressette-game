@@ -35,8 +35,8 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful:", data.username, data.id);
         saveUserData(data);
+        localStorage.setItem("userData", JSON.stringify(data));
         navigate("/main-menu");
       } else {
         const errorData = await response.json();

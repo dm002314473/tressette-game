@@ -14,7 +14,6 @@ import GamePage from "./components/GamePage/gamePage";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import EnterNewPasswordPage from "./components/ResetPassword/EnterNewPasswordPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
-import { useUser } from "./components/globalUsername/userContext";
 
 function App() {
   useEffect(() => {
@@ -30,7 +29,6 @@ function App() {
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/reset-password/enter-mail" element={<ResetPassword />} />
         <Route path="/reset-password" element={<EnterNewPasswordPage />} />
-
         <Route element={<ProtectedRoute />}>
           <Route path="/main-menu" element={<MainMenuPage />} />
           <Route path="/create-game" element={<CreateGame />} />
@@ -41,10 +39,13 @@ function App() {
           <Route path="/stats/my-stats" element={<MyStatsPage />} />
           <Route path="/game/:id" element={<GamePage />} />
         </Route>
-
         <Route
           path="*"
-          element={<Navigate to={useUser() ? "/main-menu" : "/"} />}
+          element={
+            <Navigate
+              to={localStorage.getItem("userData") ? "/main-menu" : "/"}
+            />
+          }
         />
       </Routes>
     </div>
