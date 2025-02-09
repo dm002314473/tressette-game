@@ -41,7 +41,6 @@ const GamePage = () => {
   }, [id]);
 
   const handleCardClick = (card) => {
-    console.log("Card clicked:", card, id);
     socket.emit("playMove", { card, gameId: id });
   };
 
@@ -52,8 +51,6 @@ const GamePage = () => {
 
   useEffect(() => {
     const handleMovePlayed = (cardPlayed, updatedGame) => {
-      console.log("karta je bacena, movePLayed vracen u front");
-
       setGameData(updatedGame);
 
       setTableCards((prevTableCards) => [

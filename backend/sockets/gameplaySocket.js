@@ -98,9 +98,7 @@ module.exports = (io) => {
     socket.on("playMove", async ({ card, gameId }) => {
       const currentGame = await Game.findOne({ id: gameId.id });
 
-      console.log(currentGame.turn, card.playerId);
       if (currentGame.turn !== card.playerId) {
-        console.log("Not your turn");
         return;
       }
 
@@ -110,8 +108,6 @@ module.exports = (io) => {
 
       if (currentPlayerTurn) {
         if (playBySuit(currentPlayerTurn.hand, card, currentGame.boardState)) {
-          console.log("card is played");
-
           currentGame.turn = changeIdOfPlayersTurn(
             currentGame.turn,
             currentGame.players
@@ -134,6 +130,7 @@ module.exports = (io) => {
           }
 
           io.to(currentGame.id).emit("movePlayed", card, currentGame);
+          console.log("emited");
 
           updateDataBase(currentGame);
         }

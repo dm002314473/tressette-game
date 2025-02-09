@@ -17,17 +17,13 @@ const playBySuit = (playerHand, selectedCard, tableCards) => {
       validCards.length > 0 &&
       isSelectedCardOfSameSuit(validCards, selectedCard)
     ) {
-      console.log("selected card is of correct suit");
       return selectedCard;
     } else if (validCards.length == 0) {
-      console.log("suit doesnt matter since player have non of given suit");
       return selectedCard;
     } else {
-      console.log("select card of correct suit");
       return null;
     }
   } else {
-    console.log("table is empty, suit doesnt matter");
     return selectedCard;
   }
 };
@@ -48,7 +44,6 @@ const changeIdOfPlayersTurn = (currentPlayerTurnId, allPlayers) => {
 };
 
 const updateDataBase = async (currentGame) => {
-  console.log("turn: ", currentGame.turn);
   try {
     await currentGame.save();
   } catch (error) {
@@ -76,7 +71,6 @@ const calculateRoundWinner = (playedCards) => {
 
 const removeCardFromPlayer = (player, selectedCard) => {
   let updatedHand = player.hand.filter((card) => {
-    console.log("Card: ", card._id.toString());
     return card._id.toString() !== selectedCard._id.toString();
   });
 
