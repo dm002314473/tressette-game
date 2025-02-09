@@ -75,15 +75,20 @@ const calculateRoundWinner = (playedCards) => {
 };
 
 const removeCardFromPlayer = (player, selectedCard) => {
-  console.log("Selected: ", selectedCard._id.toString());
-
   let updatedHand = player.hand.filter((card) => {
     console.log("Card: ", card._id.toString());
     return card._id.toString() !== selectedCard._id.toString();
   });
 
-  console.log("Updated deck: ", updatedHand);
   return updatedHand;
+};
+
+const dealNewCards = (game, player) => {
+  const newCard = game.remainingDeck[game.remainingDeck.length - 1];
+  game.remainingDeck.pop();
+  newCard.playerId = player.socketId;
+  player.hand.push(newCard);
+  return player.hand;
 };
 
 const updateGameState = (gameState, roundWinner) => {
@@ -99,4 +104,5 @@ module.exports = {
   changeIdOfPlayersTurn,
   updateDataBase,
   removeCardFromPlayer,
+  dealNewCards,
 };

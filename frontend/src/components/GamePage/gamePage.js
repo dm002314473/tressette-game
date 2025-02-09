@@ -51,7 +51,11 @@ const GamePage = () => {
   });
 
   useEffect(() => {
-    const handleMovePlayed = (cardPlayed) => {
+    const handleMovePlayed = (cardPlayed, updatedGame) => {
+      console.log("karta je bacena, movePLayed vracen u front");
+
+      setGameData(updatedGame);
+
       setTableCards((prevTableCards) => [
         ...(prevTableCards || []),
         cardPlayed,
@@ -69,7 +73,6 @@ const GamePage = () => {
     if (tableCards.length === 2) {
       setTimeout(() => {
         setTableCards([]);
-        console.log("Table cards cleared");
       }, 1500);
     }
   }, [tableCards]);

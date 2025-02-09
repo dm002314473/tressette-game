@@ -7,6 +7,7 @@ const {
   updateDataBase,
   calculateRoundWinner,
   removeCardFromPlayer,
+  dealNewCards,
 } = require("../utils/gameRules");
 
 let activeGames = {};
@@ -110,7 +111,6 @@ module.exports = (io) => {
       if (currentPlayerTurn) {
         if (playBySuit(currentPlayerTurn.hand, card, currentGame.boardState)) {
           console.log("card is played");
-          io.to(currentGame.id).emit("movePlayed", card);
 
           currentGame.turn = changeIdOfPlayersTurn(
             currentGame.turn,
@@ -121,12 +121,19 @@ module.exports = (io) => {
             currentPlayerTurn,
             card
           );
+
           currentGame.boardState.push(card);
 
           if (currentGame.boardState.length == currentGame.players.length) {
             currentGame.turn = calculateRoundWinner(currentGame.boardState);
             currentGame.boardState = [];
+            if (currentGame.remainingDeck.length >= currentGame.players.length)
+              currentGame.players.forEach((player) => {
+                player.hand = dealNewCards(currentGame, player);
+              });
           }
+
+          io.to(currentGame.id).emit("movePlayed", card, currentGame);
 
           updateDataBase(currentGame);
         }
