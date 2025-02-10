@@ -1,6 +1,14 @@
 const loadActiveGames = require("./loadActiveGames");
 const Deck = require("../models/Deck");
 const Game = require("../models/Game");
+const {
+  playBySuit,
+  changeIdOfPlayersTurn,
+  updateDataBase,
+  calculateRoundWinner,
+  removeCardFromPlayer,
+  dealNewCards,
+} = require("../utils/gameRules");
 
 let activeGames = {};
 
@@ -9,7 +17,6 @@ const initializeGames = async () => {
 };
 
 module.exports = (io) => {
-  //novo
   const gameDeck = {};
   let currentGame = {};
 
@@ -91,13 +98,43 @@ module.exports = (io) => {
     socket.on("playMove", async ({ card, gameId }) => {
       const currentGame = await Game.findOne({ id: gameId.id });
 
-      console.log(currentGame.turn, card.playerId);
       if (currentGame.turn !== card.playerId) {
-        console.log("Not your turn");
         return;
       }
 
-      console.log("WE PLAYED THE CARD");
+      const currentPlayerTurn = currentGame.players.find(
+        (player) => player.socketId === currentGame.turn
+      );
+
+      if (currentPlayerTurn) {
+        if (playBySuit(currentPlayerTurn.hand, card, currentGame.boardState)) {
+          currentGame.turn = changeIdOfPlayersTurn(
+            currentGame.turn,
+            currentGame.players
+          );
+
+          currentPlayerTurn.hand = removeCardFromPlayer(
+            currentPlayerTurn,
+            card
+          );
+
+          currentGame.boardState.push(card);
+
+          if (currentGame.boardState.length == currentGame.players.length) {
+            currentGame.turn = calculateRoundWinner(currentGame.boardState);
+            currentGame.boardState = [];
+            if (currentGame.remainingDeck.length >= currentGame.players.length)
+              currentGame.players.forEach((player) => {
+                player.hand = dealNewCards(currentGame, player);
+              });
+          }
+
+          io.to(currentGame.id).emit("movePlayed", card, currentGame);
+          console.log("emited");
+
+          updateDataBase(currentGame);
+        }
+      }
     });
 
     socket.on("disconnect", () => {

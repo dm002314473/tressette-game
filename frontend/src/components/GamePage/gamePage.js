@@ -17,6 +17,7 @@ const GamePage = () => {
   const { id } = useParams();
   const { userData, setUserData } = useUser();
   const [gameData, setGameData] = useState(null);
+  const [tableCards, setTableCards] = useState([]);
 
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData"));
@@ -40,7 +41,6 @@ const GamePage = () => {
   }, [id]);
 
   const handleCardClick = (card) => {
-    console.log("Card clicked:", card, id);
     socket.emit("playMove", { card, gameId: id });
   };
 
@@ -49,11 +49,30 @@ const GamePage = () => {
     console.log("Round ended, new game state: ", updatedGameState);
   });
 
-  socket.on("movePlayed", (cardPlayed) => {
-    console.log(cardPlayed);
-    // removeCardFromPlayer(card, playerId);
-    // addCardToTable(card);
-  });
+  useEffect(() => {
+    const handleMovePlayed = (cardPlayed, updatedGame) => {
+      setGameData(updatedGame);
+
+      setTableCards((prevTableCards) => [
+        ...(prevTableCards || []),
+        cardPlayed,
+      ]);
+    };
+
+    socket.on("movePlayed", handleMovePlayed);
+
+    return () => {
+      socket.off("movePlayed", handleMovePlayed);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (tableCards.length === 2) {
+      setTimeout(() => {
+        setTableCards([]);
+      }, 1500);
+    }
+  }, [tableCards]);
 
   return (
     <div className="container">
@@ -63,7 +82,7 @@ const GamePage = () => {
       {/* Middle Area */}
       <div className="middle-container">
         <RemainingDeck remainingDeck={gameData?.remainingDeck} />
-        <TableDeck tableCards={gameData?.boardState} />
+        <TableDeck tableCards={tableCards} />
         {gameData?.type === "4" && (
           <>
             <TopDeck />

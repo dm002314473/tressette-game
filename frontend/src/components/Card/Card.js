@@ -26,7 +26,7 @@ const Card = ({ card, index, isYourCard, onClick }) => {
           cardStyle() !== "your-card" ? `rotate(${randomRotation}deg)` : "",
       }}
     >
-      {cardStyle() === "your-card" ? (
+      {cardStyle() === "your-card" || cardStyle() === "on-table" ? (
         <>
           <img src={imagePath} alt="" className="card-image" />
         </>
