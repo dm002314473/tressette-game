@@ -106,12 +106,14 @@ module.exports = (io) => {
         (player) => player.socketId === currentGame.turn
       );
 
+      console.log("turn prije bacanja karte: ", currentGame.turn);
       if (currentPlayerTurn) {
         if (playBySuit(currentPlayerTurn.hand, card, currentGame.boardState)) {
           currentGame.turn = changeIdOfPlayersTurn(
             currentGame.turn,
             currentGame.players
           );
+          console.log("turn poslje bacanja karte: ", currentGame.turn);
 
           currentPlayerTurn.hand = removeCardFromPlayer(
             currentPlayerTurn,
@@ -122,6 +124,7 @@ module.exports = (io) => {
 
           if (currentGame.boardState.length == currentGame.players.length) {
             currentGame.turn = calculateRoundWinner(currentGame.boardState);
+            console.log("turn kad se karte maknu sa stola: ", currentGame.turn);
             currentGame.boardState = [];
             if (currentGame.remainingDeck.length >= currentGame.players.length)
               currentGame.players.forEach((player) => {

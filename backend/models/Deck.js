@@ -7,7 +7,7 @@ class Deck {
     const suits = ["bastoni", "denari", "coppe", "spadi"];
     const values = ["1", "2", "3", "4", "5", "6", "7", "11", "12", "13"];
     const points = ["3", "1", "1", "0", "0", "0", "0", "1", "1", "1"];
-    const trueValue = ["8", "10", "9", "1", "2", "3", "4", "5", "6", "7"];
+    const trueValue = ["8", "9", "10", "1", "2", "3", "4", "5", "6", "7"];
     const playerId = "remainingDeck";
 
     const deck = [];

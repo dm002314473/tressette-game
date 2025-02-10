@@ -52,19 +52,37 @@ const updateDataBase = async (currentGame) => {
 };
 
 const calculateRoundWinner = (playedCards) => {
+  playedCards.forEach((card) => {
+    console.log(
+      `karta na stolu: ${card.value} of ${card.suit} true value ${card.trueValue}`
+    );
+  });
+
   const validCards = playedCards.filter(
     (card) => card.suit === playedCards[0].suit
   );
 
-  if (validCards.length == 0) {
+  validCards.forEach((card) => {
+    console.log(
+      `karta na stolu: ${card.value} of ${card.suit} true value ${card.trueValue}`
+    );
+  });
+
+  if (validCards.length == 1) {
+    console.log(
+      `jedina vazeca pobjeduje: ${validCards[0].value} of ${validCards[0].suit} true value ${validCards[0].trueValue}`
+    );
     return playedCards[0].playerId;
   } else {
     let highestCard = validCards[0];
     validCards.forEach((card) => {
-      if (card.trueValue > highestCard.trueValue) {
+      if (Number(card.trueValue) > Number(highestCard.trueValue)) {
         highestCard = card;
       }
     });
+    console.log(
+      `pobjeduje od svih: ${highestCard.value} of ${highestCard.suit} true value ${highestCard.trueValue}`
+    );
     return highestCard.playerId;
   }
 };
