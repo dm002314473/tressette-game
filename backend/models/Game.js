@@ -26,6 +26,7 @@ const gameSchema = new mongoose.Schema({
           playerId: { type: String, required: false },
         },
       ],
+      points: { type: Number, default: 0 },
     },
   ],
   status: {

@@ -8,6 +8,7 @@ const {
   calculateRoundWinner,
   removeCardFromPlayer,
   dealNewCards,
+  calculatePoints,
 } = require("../utils/gameRules");
 
 let activeGames = {};
@@ -124,7 +125,14 @@ module.exports = (io) => {
 
           if (currentGame.boardState.length == currentGame.players.length) {
             currentGame.turn = calculateRoundWinner(currentGame.boardState);
-            console.log("turn kad se karte maknu sa stola: ", currentGame.turn);
+            currentGame.players.forEach((player) => {
+              if (player.socketId == currentGame.turn) {
+                player.points += calculatePoints(
+                  currentGame.boardState,
+                  currentGame.players
+                );
+              }
+            });
             currentGame.boardState = [];
             if (currentGame.remainingDeck.length >= currentGame.players.length)
               currentGame.players.forEach((player) => {

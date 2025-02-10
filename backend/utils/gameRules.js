@@ -1,3 +1,5 @@
+const { forEach } = require("lodash");
+
 const isSelectedCardOfSameSuit = (hand, card) => {
   let flag = false;
   hand.forEach((cardInHand) => {
@@ -87,6 +89,24 @@ const calculateRoundWinner = (playedCards) => {
   }
 };
 
+const calculatePoints = (tableCards, players) => {
+  let points = 0;
+  tableCards.forEach((card) => {
+    points += Number(card.points);
+  });
+
+  let flag = true;
+
+  players.forEach((player) => {
+    if (player.hand.length > 0) {
+      flag = false;
+    }
+  });
+  flag ? (points += 3) : points;
+
+  return points;
+};
+
 const removeCardFromPlayer = (player, selectedCard) => {
   let updatedHand = player.hand.filter((card) => {
     return card._id.toString() !== selectedCard._id.toString();
@@ -117,4 +137,5 @@ module.exports = {
   updateDataBase,
   removeCardFromPlayer,
   dealNewCards,
+  calculatePoints,
 };
