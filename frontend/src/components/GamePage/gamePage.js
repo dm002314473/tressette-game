@@ -18,6 +18,8 @@ const GamePage = () => {
   const { userData, setUserData } = useUser();
   const [gameData, setGameData] = useState(null);
   const [tableCards, setTableCards] = useState([]);
+  let yourPoints;
+  let opponentPoints;
 
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData"));
@@ -44,9 +46,12 @@ const GamePage = () => {
     socket.emit("playMove", { card, gameId: id });
   };
 
-  socket.on("roundEnded", (updatedGameState) => {
-    setGameData(updatedGameState);
-    console.log("Round ended, new game state: ", updatedGameState);
+  const calculatePoints = (game) => {};
+
+  socket.on("gameOver", (game) => {
+    calculatePoints(game);
+    console.log("your points: ", yourPoints);
+    console.log("opponent points: ", opponentPoints);
   });
 
   useEffect(() => {

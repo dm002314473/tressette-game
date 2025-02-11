@@ -140,8 +140,14 @@ module.exports = (io) => {
               });
           }
 
+          const allHandsEmpty = currentGame.players.every(
+            (player) => Array.isArray(player.hand) && player.hand.length === 0
+          );
+
           io.to(currentGame.id).emit("movePlayed", card, currentGame);
-          console.log("emited");
+          if (allHandsEmpty) {
+            io.to(currentGame.id).emit("gameOver", currentGame);
+          }
 
           updateDataBase(currentGame);
         }
