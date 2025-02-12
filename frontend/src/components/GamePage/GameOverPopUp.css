@@ -1,0 +1,70 @@
+.end-screen {
+  position: absolute;
+  top: 30%;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 70%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.popup-container {
+  background: linear-gradient(45deg, #6b8e23 20%, #a3a380 40%, #5a3e2b 80%);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 90%;
+  max-width: 400px;
+  animation: popup-fade 0.4s ease-in-out;
+  cursor: default;
+}
+
+@keyframes popup-fade {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.game-result {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.points {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.points span {
+  font-weight: bold;
+  color: yellow;
+}
+
+.close-btn {
+  background: #fff;
+  color: #8b3c3c;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  margin: 5%;
+  width: 40%;
+}
+
+.close-btn:hover {
+  background: #ffd700;
+  color: #000;
+  font-weight: bold;
+}

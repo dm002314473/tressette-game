@@ -54,26 +54,11 @@ const updateDataBase = async (currentGame) => {
 };
 
 const calculateRoundWinner = (playedCards) => {
-  playedCards.forEach((card) => {
-    console.log(
-      `karta na stolu: ${card.value} of ${card.suit} true value ${card.trueValue}`
-    );
-  });
-
   const validCards = playedCards.filter(
     (card) => card.suit === playedCards[0].suit
   );
 
-  validCards.forEach((card) => {
-    console.log(
-      `karta na stolu: ${card.value} of ${card.suit} true value ${card.trueValue}`
-    );
-  });
-
   if (validCards.length == 1) {
-    console.log(
-      `jedina vazeca pobjeduje: ${validCards[0].value} of ${validCards[0].suit} true value ${validCards[0].trueValue}`
-    );
     return playedCards[0].playerId;
   } else {
     let highestCard = validCards[0];
@@ -82,9 +67,6 @@ const calculateRoundWinner = (playedCards) => {
         highestCard = card;
       }
     });
-    console.log(
-      `pobjeduje od svih: ${highestCard.value} of ${highestCard.suit} true value ${highestCard.trueValue}`
-    );
     return highestCard.playerId;
   }
 };
@@ -102,7 +84,7 @@ const calculatePoints = (tableCards, players) => {
       flag = false;
     }
   });
-  flag ? (points += 3) : points;
+  flag ? (points += 3 - (points % 3)) : points;
 
   return points;
 };
@@ -123,6 +105,12 @@ const dealNewCards = (game, player) => {
   return player.hand;
 };
 
+const calculateEndPoints = (players) => {
+  let points1 = Math.trunc(players[0].points / 3) + " " + players[0].socketId;
+  let points2 = Math.trunc(players[1].points / 3) + " " + players[1].socketId;
+  return [points1, points2];
+};
+
 const updateGameState = (gameState, roundWinner) => {
   gameState.points[roundWinner]++;
   gameState.turn = (gameState.turn + 1) % gameState.players.length;
@@ -138,4 +126,5 @@ module.exports = {
   removeCardFromPlayer,
   dealNewCards,
   calculatePoints,
+  calculateEndPoints,
 };

@@ -10,6 +10,7 @@ import PlayerCards from "./PlayerCards";
 import SideDeck from "./SideDecks";
 import TableDeck from "./TableDeck";
 import TopDeck from "./TopDeck";
+import GameOverPopUp from "./GameOverPopUp";
 
 const socket = io(`${process.env.REACT_APP_BACKEND}`);
 
@@ -18,8 +19,9 @@ const GamePage = () => {
   const { userData, setUserData } = useUser();
   const [gameData, setGameData] = useState(null);
   const [tableCards, setTableCards] = useState([]);
-  let yourPoints;
-  let opponentPoints;
+  const [isEndGameVisible, setIsEndGameVisible] = useState(false);
+  const [yourPoints, setYourPoints] = useState(0);
+  const [opponentPoints, setOpponentPoints] = useState(0);
 
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData"));
@@ -46,12 +48,17 @@ const GamePage = () => {
     socket.emit("playMove", { card, gameId: id });
   };
 
-  const calculatePoints = (game) => {};
-
-  socket.on("gameOver", (game) => {
-    calculatePoints(game);
-    console.log("your points: ", yourPoints);
-    console.log("opponent points: ", opponentPoints);
+  socket.on("gameOver", (points) => {
+    const player1 = points[0].split(" ");
+    const player2 = points[1].split(" ");
+    if (player1[1] == socket.id) {
+      setYourPoints(player1[0]);
+      setOpponentPoints(player2[0]);
+    } else {
+      setYourPoints(player2[0]);
+      setOpponentPoints(player1[0]);
+    }
+    setIsEndGameVisible(true);
   });
 
   useEffect(() => {
@@ -87,6 +94,11 @@ const GamePage = () => {
       {/* Middle Area */}
       <div className="middle-container">
         <RemainingDeck remainingDeck={gameData?.remainingDeck} />
+        <GameOverPopUp
+          flag={isEndGameVisible}
+          yourPoints={yourPoints}
+          opponentPoints={opponentPoints}
+        />
         <TableDeck tableCards={tableCards} />
         {gameData?.type === "4" && (
           <>

@@ -9,6 +9,7 @@ const {
   removeCardFromPlayer,
   dealNewCards,
   calculatePoints,
+  calculateEndPoints,
 } = require("../utils/gameRules");
 
 let activeGames = {};
@@ -107,14 +108,12 @@ module.exports = (io) => {
         (player) => player.socketId === currentGame.turn
       );
 
-      console.log("turn prije bacanja karte: ", currentGame.turn);
       if (currentPlayerTurn) {
         if (playBySuit(currentPlayerTurn.hand, card, currentGame.boardState)) {
           currentGame.turn = changeIdOfPlayersTurn(
             currentGame.turn,
             currentGame.players
           );
-          console.log("turn poslje bacanja karte: ", currentGame.turn);
 
           currentPlayerTurn.hand = removeCardFromPlayer(
             currentPlayerTurn,
@@ -146,7 +145,8 @@ module.exports = (io) => {
 
           io.to(currentGame.id).emit("movePlayed", card, currentGame);
           if (allHandsEmpty) {
-            io.to(currentGame.id).emit("gameOver", currentGame);
+            const points = calculateEndPoints(currentGame.players);
+            io.to(currentGame.id).emit("gameOver", points);
           }
 
           updateDataBase(currentGame);
