@@ -1,9 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./GameOverPopUp.css";
 
 const EndGamePopUp = ({ flag, yourPoints, opponentPoints }) => {
+  const navigate = useNavigate();
+
   if (!flag) return null;
+
+  const handleExitButtonClick = () => {
+    navigate("/main-menu");
+  };
 
   const resultMessage =
     yourPoints > opponentPoints
@@ -20,11 +27,8 @@ const EndGamePopUp = ({ flag, yourPoints, opponentPoints }) => {
         <p className="points">
           Suparnički punti: <span>{opponentPoints}</span>
         </p>
-        <button className="close-btn" onClick={() => window.location.reload()}>
-          Play Again
-        </button>
-        <button className="close-btn" onClick={() => window.location.reload()}>
-          Exit
+        <button className="close-btn" onClick={() => handleExitButtonClick()}>
+          Izlaz
         </button>
       </div>
     </div>

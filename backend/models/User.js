@@ -12,8 +12,8 @@ const UserSchema = new mongoose.Schema({
     winPercentage: { type: Number, required: true },
     played: { type: Number, required: true },
   },
-  resetPasswordToken: String, // Token for password reset
-  resetPasswordExpires: Date, // Expiration date for the reset token
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 UserSchema.pre("save", async function (next) {

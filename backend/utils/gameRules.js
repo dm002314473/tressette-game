@@ -77,16 +77,33 @@ const calculatePoints = (tableCards, players) => {
     points += Number(card.points);
   });
 
-  let flag = true;
-
-  players.forEach((player) => {
-    if (player.hand.length > 0) {
-      flag = false;
-    }
-  });
-  flag ? (points += 3 - (points % 3)) : points;
-
   return points;
+};
+
+const calculateUltima = (player, players, turn) => {
+  if (player.socketId === turn) {
+    const index = players.findIndex((p) => p.socketId === player.socketId);
+
+    let points;
+
+    if (index === 0 || index === 2) {
+      if (players.length === 4) {
+        points = players[0].points + players[1].points;
+      } else {
+        points = players[0].points;
+      }
+      return 3 - (points % 3);
+    } else {
+      if (players.length === 4) {
+        points = players[1].points + players[3].points;
+      } else {
+        points = players[1].points;
+      }
+      return 3 - (points % 3);
+    }
+  }
+
+  return 0;
 };
 
 const removeCardFromPlayer = (player, selectedCard) => {
@@ -108,7 +125,48 @@ const dealNewCards = (game, player) => {
 const calculateEndPoints = (players) => {
   let points1 = Math.trunc(players[0].points / 3) + " " + players[0].socketId;
   let points2 = Math.trunc(players[1].points / 3) + " " + players[1].socketId;
+  if (players.length === 4) {
+    let points3 =
+      Math.trunc((players[0].points + players[2].points) / 3) +
+      " " +
+      players[0].socketId +
+      " " +
+      players[2].socketId;
+    let points4 =
+      Math.trunc((players[1].points + players[3].points) / 3) +
+      " " +
+      players[1].socketId +
+      " " +
+      players[3].socketId;
+    return [points1, points2, points3, points4];
+  }
   return [points1, points2];
+};
+
+const dataForUserUpdate = (player, gameType, players) => {
+  const userId = player.userId;
+  const username = player.username;
+  let win = true;
+  let playerPoints;
+  let opponentPoints;
+
+  if (gameType === "2") {
+    win = !players.some((p) => p.points > player.points);
+  } else {
+    const index = players.findIndex((p) => p.socketId === player.socketId);
+    if (index === 0 || index === 2) {
+      playerPoints = players[0].points + players[2].points;
+      opponentPoints = players[1].points + players[3].points;
+    } else {
+      playerPoints = players[1].points + players[3].points;
+      opponentPoints = players[0].points + players[2].points;
+    }
+    if (playerPoints < opponentPoints) {
+      win = false;
+    }
+  }
+
+  return [userId, username, gameType, win];
 };
 
 const updateGameState = (gameState, roundWinner) => {
@@ -127,4 +185,6 @@ module.exports = {
   dealNewCards,
   calculatePoints,
   calculateEndPoints,
+  calculateUltima,
+  dataForUserUpdate,
 };

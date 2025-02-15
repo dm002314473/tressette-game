@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./GamePage.css";
 import { useUser } from "../globalUsername/userContext";
 import { useParams } from "react-router-dom";
-import OpponentCards from "./OpponentCards";
 import RemainingDeck from "./RemainingDeck";
 import PlayerCards from "./PlayerCards";
 import SideDeck from "./SideDecks";
@@ -48,15 +47,29 @@ const GamePage = () => {
     socket.emit("playMove", { card, gameId: id });
   };
 
-  socket.on("gameOver", (points) => {
+  socket.on("gameOver", (points, gameType) => {
     const player1 = points[0].split(" ");
     const player2 = points[1].split(" ");
-    if (player1[1] == socket.id) {
-      setYourPoints(player1[0]);
-      setOpponentPoints(player2[0]);
-    } else {
-      setYourPoints(player2[0]);
-      setOpponentPoints(player1[0]);
+
+    if (gameType === "2") {
+      if (player1[1] === socket.id) {
+        setYourPoints(player1[0]);
+        setOpponentPoints(player2[0]);
+      } else {
+        setYourPoints(player2[0]);
+        setOpponentPoints(player1[0]);
+      }
+    }
+    if (gameType === "4") {
+      const player3 = points[2].split(" ");
+      const player4 = points[3].split(" ");
+      if (player3[1] === socket.id || player3[2] === socket.id) {
+        setYourPoints(player3[0]);
+        setOpponentPoints(player4[0]);
+      } else {
+        setYourPoints(player4[0]);
+        setOpponentPoints(player3[0]);
+      }
     }
     setIsEndGameVisible(true);
   });
@@ -79,7 +92,7 @@ const GamePage = () => {
   }, []);
 
   useEffect(() => {
-    if (tableCards.length === 2) {
+    if (tableCards.length === Number(gameData?.type)) {
       setTimeout(() => {
         setTableCards([]);
       }, 1500);

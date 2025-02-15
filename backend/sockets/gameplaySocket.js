@@ -1,6 +1,7 @@
 const loadActiveGames = require("./loadActiveGames");
 const Deck = require("../models/Deck");
 const Game = require("../models/Game");
+const Users = require("../models/User");
 const {
   playBySuit,
   changeIdOfPlayersTurn,
@@ -10,12 +11,82 @@ const {
   dealNewCards,
   calculatePoints,
   calculateEndPoints,
+  calculateUltima,
+  dataForUserUpdate,
 } = require("../utils/gameRules");
+require("dotenv").config();
+const { MongoClient } = require("mongodb");
+const { forEach } = require("lodash");
+
+const client = new MongoClient(process.env.MONGO_URI);
 
 let activeGames = {};
 
 const initializeGames = async () => {
   activeGames = await loadActiveGames();
+};
+
+const deleteGame = async (game) => {
+  try {
+    await client.connect();
+    const database = client.db("test");
+    const collection = database.collection("games");
+
+    const filter = { gameId: game.gameId };
+
+    const result = await collection.deleteOne(filter);
+
+    if (result.deletedCount === 1) {
+      console.log("Successfully deleted one game.");
+    } else {
+      console.log("No document matched the query.");
+    }
+  } catch (error) {
+    console.error("Error deleting document:", error);
+  } finally {
+    await client.close();
+  }
+};
+
+const updateUser = async (userId, username, gameType, win) => {
+  try {
+    const user = await Users.findOne({ username: username });
+
+    if (!user) {
+      console.log("User not found");
+      return null;
+    }
+
+    const totalWins = win ? user.stats.totalWins + 1 : user.stats.totalWins;
+    const win1v1 = gameType === "2" ? user.stats.win1v1 + 1 : user.stats.win1v1;
+    const win2v2 = gameType === "4" ? user.stats.win2v2 + 1 : user.stats.win2v2;
+    const played = user.stats.played + 1;
+    const winPercentage = Number((totalWins / played).toFixed(2)) * 100;
+
+    const userToUpdate = await Users.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          "stats.totalWins": totalWins,
+          "stats.win1v1": win1v1,
+          "stats.win2v2": win2v2,
+          "stats.winPercentage": winPercentage,
+          "stats.played": played,
+        },
+      },
+      { new: true }
+    );
+
+    if (!userToUpdate) {
+      console.log("User not found");
+      return null;
+    }
+
+    return userToUpdate;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return null;
+  }
 };
 
 module.exports = (io) => {
@@ -122,7 +193,7 @@ module.exports = (io) => {
 
           currentGame.boardState.push(card);
 
-          if (currentGame.boardState.length == currentGame.players.length) {
+          if (currentGame.boardState.length === currentGame.players.length) {
             currentGame.turn = calculateRoundWinner(currentGame.boardState);
             currentGame.players.forEach((player) => {
               if (player.socketId == currentGame.turn) {
@@ -145,8 +216,31 @@ module.exports = (io) => {
 
           io.to(currentGame.id).emit("movePlayed", card, currentGame);
           if (allHandsEmpty) {
+            currentGame.players.forEach((player) => {
+              player.points += calculateUltima(
+                player,
+                currentGame.players,
+                currentGame.turn
+              );
+            });
             const points = calculateEndPoints(currentGame.players);
-            io.to(currentGame.id).emit("gameOver", points);
+            io.to(currentGame.id).emit("gameOver", points, currentGame.type);
+
+            currentGame.players.forEach((player) => {
+              const dataArray = dataForUserUpdate(
+                player,
+                currentGame.type,
+                currentGame.players
+              );
+              updateUser(
+                dataArray[0],
+                dataArray[1],
+                dataArray[2],
+                dataArray[3]
+              );
+            });
+
+            deleteGame(currentGame);
           }
 
           updateDataBase(currentGame);
